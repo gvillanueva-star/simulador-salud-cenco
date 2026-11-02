@@ -1,0 +1,3852 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Simulador Formativo: Sistema de Salud en Chile - Unidad 1 | CFT CENCO</title>
+
+    <!-- Tailwind CSS CDN -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome Icons -->
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+
+
+    <script>
+
+        tailwind.config = {
+
+            theme: {
+
+                extend: {
+
+                    colors: {
+
+                        cenco: {
+
+                            navy: '#003865',
+
+                            blue: '#005596',
+
+                            corp: '#0066B3',
+
+                            cyan: '#00A3E0',
+
+                            orange: '#F39200',
+
+                            orangeDark: '#D97F00',
+
+                            bg: '#F4F7FA',
+
+                            light: '#E6F2FA'
+
+                        }
+
+                    },
+
+                    fontFamily: {
+
+                        sans: ['Inter', 'sans-serif'],
+
+                        heading: ['Plus Jakarta Sans', 'sans-serif']
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    </script>
+
+
+
+    <style>
+
+        body {
+
+            background-color: #F4F7FA;
+
+            font-family: 'Inter', sans-serif;
+
+            color: #1E293B;
+
+        }
+
+        h1, h2, h3, h4, .font-heading {
+
+            font-family: 'Plus Jakarta Sans', sans-serif;
+
+        }
+
+        /* Custom scrollbar */
+
+        ::-webkit-scrollbar {
+
+            width: 8px;
+
+            height: 8px;
+
+        }
+
+        ::-webkit-scrollbar-track {
+
+            background: #F1F5F9;
+
+        }
+
+        ::-webkit-scrollbar-thumb {
+
+            background: #CBD5E1;
+
+            border-radius: 4px;
+
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+
+            background: #94A3B8;
+
+        }
+
+        .tab-active {
+
+            border-bottom: 3px solid #F39200;
+
+            color: #003865;
+
+            background-color: #FFFFFF;
+
+            font-weight: 700;
+
+        }
+
+        .case-btn-active {
+
+            background-color: #003865 !important;
+
+            color: #FFFFFF !important;
+
+            border-color: #003865 !important;
+
+            box-shadow: 0 4px 12px rgba(0, 56, 101, 0.2);
+
+        }
+
+        @keyframes pulse-subtle {
+
+            0%, 100% { opacity: 1; }
+
+            50% { opacity: 0.7; }
+
+        }
+
+        .animate-pulse-subtle {
+
+            animation: pulse-subtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+        }
+
+        /* Print Styles for Moodle / PDF Deliverable */
+
+        @media print {
+
+            body {
+
+                background-color: #FFFFFF !important;
+
+                -webkit-print-color-adjust: exact !important;
+
+                print-color-adjust: exact !important;
+
+            }
+
+            .no-print {
+
+                display: none !important;
+
+            }
+
+            .print-only {
+
+                display: block !important;
+
+            }
+
+            .print-card {
+
+                box-shadow: none !important;
+
+                border: 1px solid #CBD5E1 !important;
+
+                break-inside: avoid;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body class="min-h-screen flex flex-col">
+
+
+
+    <!-- ==========================================
+
+         CABECERA INSTITUCIONAL CFT CENCO
+
+    =========================================== -->
+
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm no-print">
+
+        <!-- Top Institutional Bar -->
+
+        <div class="bg-cenco-navy text-white text-xs py-1.5 px-4 sm:px-6 lg:px-8">
+
+            <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2">
+
+                <div class="flex items-center space-x-2">
+
+                    <i class="fa-solid fa-Graduation-Cap text-cenco-orange"></i>
+
+                    <span class="font-medium tracking-wide">ENTORNO DE SIMULACIÓN ACADÉMICA Y APRENDIZAJE ACTIVO</span>
+
+                </div>
+
+                <div class="flex items-center space-x-4">
+
+                    <span class="hidden sm:inline-flex items-center text-slate-200">
+
+                        <i class="fa-solid fa-mortar-board text-cenco-cyan mr-1.5"></i> Escuela de Salud
+
+                    </span>
+
+                    <button onclick="openEthicalModal()" class="inline-flex items-center bg-cenco-orange hover:bg-cenco-orangeDark text-white font-semibold px-2.5 py-0.5 rounded-full transition text-xs shadow-sm cursor-pointer">
+
+                        <i class="fa-solid fa-shield-halved mr-1.5"></i> Protocolo Ético IA
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- Main Header Content -->
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+
+
+
+                <!-- CFT CENCO SVG Logo (LOGO EDITABLE BLANCO) & Title -->
+
+                <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+
+                    <!-- Contenedor Azul Institucional (#003865) para resaltar el Logo Editable Blanco CFT CENCO -->
+
+                    <div class="flex-shrink-0 bg-cenco-navy px-4 py-2.5 rounded-xl border border-cenco-blue shadow-sm inline-flex items-center justify-center">
+
+                        <svg width="175" height="90" viewBox="0 0 1000 520" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Logo Oficial CFT CENCO Centro de Formación Técnica">
+
+                            <defs>
+
+                                <linearGradient id="cencoArcGradHeader" x1="340" y1="260" x2="640" y2="20" gradientUnits="userSpaceOnUse">
+
+                                    <stop offset="0%" stop-color="#F39200" />
+
+                                    <stop offset="55%" stop-color="#F9B218" />
+
+                                    <stop offset="100%" stop-color="#FDE021" />
+
+                                </linearGradient>
+
+                                <linearGradient id="cencoArrowGradHeader" x1="370" y1="180" x2="510" y2="80" gradientUnits="userSpaceOnUse">
+
+                                    <stop offset="0%" stop-color="#F39200" />
+
+                                    <stop offset="100%" stop-color="#FBB03B" />
+
+                                </linearGradient>
+
+                            </defs>
+
+
+
+                            <!-- 1. "cft" en minúsculas geométricas redondeadas blancas (arriba izquierda) -->
+
+                            <g stroke="#FFFFFF" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" fill="none">
+
+                                <!-- Letra c -->
+
+                                <path d="M 176 156 H 136 A 38 38 0 0 0 98 194 V 202 A 38 38 0 0 0 136 240 H 176" />
+
+                                <!-- Letra f -->
+
+                                <path d="M 248 114 H 224 A 24 24 0 0 0 200 138 V 240" />
+
+                                <path d="M 182 166 H 242" />
+
+                                <!-- Letra t -->
+
+                                <path d="M 276 122 V 214 A 26 26 0 0 0 302 240 H 326" />
+
+                                <path d="M 254 166 H 314" />
+
+                            </g>
+
+
+
+                            <!-- 2. Isotipo: Arco/medialuna dinámico inclinado + flecha interior redondeada -->
+
+                            <!-- Medialuna exterior degradado naranja a amarillo -->
+
+                            <path d="M 608 22 C 510 -8, 392 52, 355 152 C 326 230, 392 285, 488 262 C 555 245, 616 172, 628 112 C 632 92, 605 90, 566 118 C 520 152, 492 212, 434 212 C 384 212, 366 168, 386 124 C 414 62, 482 32, 536 38 C 568 41, 618 30, 608 22 Z" fill="url(#cencoArcGradHeader)" />
+
+                            <!-- Flecha interna apuntando arriba-derecha -->
+
+                            <path d="M 372 150 L 492 92" stroke="url(#cencoArrowGradHeader)" stroke-width="32" stroke-linecap="round" />
+
+                            <path d="M 440 74 L 495 90 L 434 176" stroke="url(#cencoArrowGradHeader)" stroke-width="32" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+
+
+
+                            <!-- 3. Logotipo "CENCO" conectado en color naranja institucional (#F39200) -->
+
+                            <g stroke="#F39200" stroke-width="28" stroke-linecap="round" stroke-linejoin="round" fill="none">
+
+                                <!-- Primera "C" con barra superior extendida sobre la "E" -->
+
+                                <path d="M 510 308 H 332 A 48 48 0 0 0 332 404 H 382" />
+
+                                <!-- Letra "E" conectada por su base con el trazo vertical izquierdo de la "N" -->
+
+                                <path d="M 505 356 H 412 V 404 H 548 V 308 L 674 404 V 308" />
+
+                                <!-- Segunda "C" conectada por su base inferior con la cápsula "O" -->
+
+                                <path d="M 814 308 H 758 A 48 48 0 0 0 758 404 H 938 A 48 48 0 0 0 938 308 H 890 A 48 48 0 0 0 890 404" />
+
+                            </g>
+
+
+
+                            <!-- 4. Línea horizontal continua naranja de lado a lado -->
+
+                            <line x1="12" y1="454" x2="988" y2="454" stroke="#F39200" stroke-width="7" stroke-linecap="round" />
+
+
+
+                            <!-- 5. Texto inferior "CENTRO DE FORMACIÓN TÉCNICA" en blanco con espaciado amplio -->
+
+                            <text x="500" y="502" text-anchor="middle" fill="#FFFFFF" font-family="'Plus Jakarta Sans', 'Inter', sans-serif" font-weight="600" font-size="31" letter-spacing="13.5">CENTRO DE FORMACIÓN TÉCNICA</text>
+
+                        </svg>
+
+                    </div>
+
+
+
+                    <div class="border-l-0 sm:border-l-2 border-slate-200 sm:pl-4">
+
+                        <div class="flex items-center gap-2">
+
+                            <span class="bg-cenco-light text-cenco-corp text-xs font-bold px-2.5 py-0.5 rounded-md border border-cenco-cyan/30">
+
+                                SIMULADOR FORMATIVO
+
+                            </span>
+
+                            <span id="ai-status-badge" class="inline-flex items-center text-xs font-medium text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
+
+                                <span class="w-2 h-2 rounded-full bg-emerald-500 mr-1.5"></span> IA Formativa Activa
+
+                            </span>
+
+                        </div>
+
+                        <h1 class="text-xl sm:text-2xl font-extrabold text-cenco-navy tracking-tight mt-1">
+
+                            Sistema de Salud en Chile <span class="text-cenco-corp font-semibold">— Unidad 1</span>
+
+                        </h1>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Curricular Context Badges -->
+
+                <div class="flex flex-wrap items-center gap-2">
+
+                    <div class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 flex items-center space-x-2">
+
+                        <i class="fa-solid fa-prescription-bottle-medical text-cenco-corp text-sm"></i>
+
+                        <div>
+
+                            <div class="text-[10px] uppercase tracking-wider text-slate-400 font-semibold leading-none">Carrera</div>
+
+                            <div class="text-xs font-bold text-cenco-navy">TNS en Farmacia</div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 flex items-center space-x-2">
+
+                        <i class="fa-solid fa-hospital-user text-cenco-cyan text-sm"></i>
+
+                        <div>
+
+                            <div class="text-[10px] uppercase tracking-wider text-slate-400 font-semibold leading-none">Asignatura</div>
+
+                            <div class="text-xs font-bold text-cenco-navy">Sistema de Salud en Chile</div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="bg-amber-50/80 border border-cenco-orange/40 rounded-lg px-3 py-1.5 flex items-center space-x-2">
+
+                        <i class="fa-solid fa-book-medical text-cenco-orange text-sm"></i>
+
+                        <div>
+
+                            <div class="text-[10px] uppercase tracking-wider text-amber-800 font-semibold leading-none">Unidad 1</div>
+
+                            <div class="text-xs font-bold text-cenco-navy">Organización, Estructura y Previsión</div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ==========================================
+
+             BARRA DE NAVEGACIÓN EN 3 PESTAÑAS
+
+        =========================================== -->
+
+        <div class="bg-slate-100/80 border-t border-slate-200">
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+                <nav class="flex space-x-1 sm:space-x-2 overflow-x-auto" aria-label="Navegación del Simulador">
+
+                    <button onclick="switchTab('tab-casos')" id="btn-tab-casos" class="tab-active flex items-center space-x-2 px-4 py-3 text-xs sm:text-sm rounded-t-lg transition whitespace-nowrap cursor-pointer">
+
+                        <i class="fa-solid fa-user-doctor text-cenco-corp"></i>
+
+                        <span>1. Simulador de Casos en Farmacia</span>
+
+                        <span id="badge-casos-count" class="ml-1.5 bg-cenco-navy text-white text-[11px] px-2 py-0.5 rounded-full">0/5</span>
+
+                    </button>
+
+
+
+                    <button onclick="switchTab('tab-institucionalidad')" id="btn-tab-institucionalidad" class="text-slate-600 hover:text-cenco-navy hover:bg-white/60 flex items-center space-x-2 px-4 py-3 text-xs sm:text-sm rounded-t-lg transition whitespace-nowrap cursor-pointer">
+
+                        <i class="fa-solid fa-building-shield text-cenco-cyan"></i>
+
+                        <span>2. Laboratorio de Institucionalidad</span>
+
+                        <span id="badge-lab-count" class="ml-1.5 bg-slate-300 text-slate-800 text-[11px] px-2 py-0.5 rounded-full">0/6</span>
+
+                    </button>
+
+
+
+                    <button onclick="switchTab('tab-reporte')" id="btn-tab-reporte" class="text-slate-600 hover:text-cenco-navy hover:bg-white/60 flex items-center space-x-2 px-4 py-3 text-xs sm:text-sm rounded-t-lg transition whitespace-nowrap cursor-pointer">
+
+                        <i class="fa-solid fa-file-signature text-cenco-orange"></i>
+
+                        <span>3. Mi Reporte y Declaración Ética (Entregable)</span>
+
+                    </button>
+
+                </nav>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- ==========================================
+
+         BANNER PERMANENTE RESUMIDO DE COMPROMISO ÉTICO
+
+    =========================================== -->
+
+    <div id="ethical-banner" class="bg-gradient-to-r from-cenco-navy via-cenco-blue to-cenco-corp text-white no-print">
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5">
+
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-2 text-xs">
+
+                <div class="flex items-center space-x-2.5">
+
+                    <span class="bg-cenco-orange text-white font-bold px-2 py-0.5 rounded uppercase tracking-wider text-[10px] flex-shrink-0">
+
+                        Compromiso Ético IA
+
+                    </span>
+
+                    <p class="text-slate-100">
+
+                        <strong>Recuerda los 4 pilares CFT CENCO:</strong> (1) Privacidad de datos (sin datos reales), (2) Verificación con Cuaderno 1 y MINSAL/ISP, (3) Pensamiento crítico del TNS en Farmacia y (4) Transparencia en tu reporte.
+
+                    </p>
+
+                </div>
+
+                <button onclick="openEthicalModal()" class="text-cenco-orange bg-white/10 hover:bg-white/20 px-3 py-1 rounded-md font-semibold transition flex-shrink-0 self-end md:self-auto cursor-pointer">
+
+                    Ver Detalle Ético <i class="fa-solid fa-arrow-up-right-from-square ml-1 text-[10px]"></i>
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ==========================================
+
+         CONTENIDO PRINCIPAL DEL SIMULADOR
+
+    =========================================== -->
+
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+
+
+        <!-- ==========================================
+
+             PESTAÑA 1: SIMULADOR DE CASOS EN FARMACIA
+
+        =========================================== -->
+
+        <section id="tab-casos" class="space-y-6">
+
+
+
+            <!-- Selector de Casos + Botón Generar Caso IA -->
+
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-5">
+
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+
+                    <div>
+
+                        <h2 class="text-base sm:text-lg font-bold text-cenco-navy flex items-center">
+
+                            <i class="fa-solid fa-clipboard-user text-cenco-corp mr-2"></i>
+
+                            Selecciona un Escenario Clínico-Previsional de Farmacia
+
+                        </h2>
+
+                        <p class="text-xs text-slate-500 mt-0.5">
+
+                            Analiza cada consulta en el mesón de farmacia y aplica los contenidos del Cuaderno 1 (Estructura, Previsión, GES, Ley 16.744, Ley Ricarte Soto e Institucionalidad).
+
+                        </p>
+
+                    </div>
+
+
+
+                    <button onclick="generateAICase()" id="btn-generate-ai-case" class="inline-flex items-center justify-center bg-gradient-to-r from-cenco-corp to-cenco-cyan hover:from-cenco-navy hover:to-cenco-corp text-white font-semibold text-xs sm:text-sm px-4 py-2.5 rounded-xl shadow-sm transition cursor-pointer flex-shrink-0">
+
+                        <i class="fa-solid fa-wand-magic-sparkles mr-2"></i>
+
+                        <span>Generar Caso Nuevo con IA</span>
+
+                    </button>
+
+                </div>
+
+
+
+                <!-- Botones de los 5 Casos Preconfigurados (+ Caso IA dinámico si existe) -->
+
+                <div id="case-selector-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5">
+
+                    <!-- Se renderiza dinámicamente con JS -->
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Contenedor Principal del Caso Activo -->
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+
+
+                <!-- COLUMNA IZQUIERDA (5 cols): Ficha del Escenario en el Mesón de Farmacia -->
+
+                <div class="lg:col-span-5 space-y-4">
+
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden sticky top-28">
+
+                        <!-- Cabecera de Ficha -->
+
+                        <div class="bg-cenco-navy text-white p-4 sm:p-5 relative overflow-hidden">
+
+                            <div class="absolute -right-6 -bottom-6 opacity-10 text-7xl">
+
+                                <i class="fa-solid fa-mortar-pestle"></i>
+
+                            </div>
+
+                            <div class="flex items-center justify-between gap-2 mb-2">
+
+                                <span id="case-tag" class="bg-cenco-orange text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wide">
+
+                                    Caso 1
+
+                                </span>
+
+                                <span id="case-status-pill" class="bg-white/15 text-white text-xs px-2.5 py-0.5 rounded-full font-medium">
+
+                                    Pendiente de resolver
+
+                                </span>
+
+                            </div>
+
+                            <h3 id="case-title" class="text-lg font-bold leading-snug">
+
+                                Cargando caso...
+
+                            </h3>
+
+                        </div>
+
+
+
+                        <!-- Cuerpo de la Ficha del Escenario -->
+
+                        <div class="p-4 sm:p-5 space-y-4 text-sm">
+
+                            <!-- Contexto Asistencial -->
+
+                            <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/80">
+
+                                <div class="flex items-center text-xs font-bold text-cenco-corp uppercase tracking-wider mb-1">
+
+                                    <i class="fa-solid fa-location-dot mr-1.5"></i> Contexto del Establecimiento
+
+                                </div>
+
+                                <p id="case-context" class="text-slate-700 leading-relaxed text-xs sm:text-sm"></p>
+
+                            </div>
+
+
+
+                            <!-- Perfil del Usuario/Paciente -->
+
+                            <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/80">
+
+                                <div class="flex items-center text-xs font-bold text-cenco-navy uppercase tracking-wider mb-1">
+
+                                    <i class="fa-solid fa-id-card-clip mr-1.5"></i> Perfil del Paciente / Usuario
+
+                                </div>
+
+                                <p id="case-profile" class="text-slate-700 leading-relaxed text-xs sm:text-sm"></p>
+
+                            </div>
+
+
+
+                            <!-- Consulta en el Mesón de Farmacia -->
+
+                            <div class="bg-cenco-light/70 p-4 rounded-xl border-l-4 border-cenco-corp">
+
+                                <div class="flex items-center text-xs font-bold text-cenco-navy uppercase tracking-wider mb-1.5">
+
+                                    <i class="fa-solid fa-comment-medical text-cenco-corp mr-1.5"></i> Consulta en el Mesón de Farmacia
+
+                                </div>
+
+                                <p id="case-query" class="text-slate-800 italic font-medium leading-relaxed text-xs sm:text-sm"></p>
+
+                            </div>
+
+
+
+                            <!-- Dilema / Pregunta Clave -->
+
+                            <div class="bg-amber-50/90 p-3.5 rounded-xl border border-amber-200">
+
+                                <div class="flex items-center text-xs font-bold text-amber-900 uppercase tracking-wider mb-1">
+
+                                    <i class="fa-solid fa-circle-question text-cenco-orange mr-1.5"></i> Dilema / Pregunta Clave para el TNS
+
+                                </div>
+
+                                <p id="case-dilemma" class="text-amber-950 font-medium leading-relaxed text-xs sm:text-sm"></p>
+
+                            </div>
+
+
+
+                            <!-- Pista Normativa / Conceptos Clave Unidad 1 -->
+
+                            <div class="pt-1">
+
+                                <button onclick="toggleCaseHint()" class="text-xs font-semibold text-cenco-corp hover:text-cenco-navy flex items-center cursor-pointer">
+
+                                    <i class="fa-solid fa-lightbulb text-cenco-orange mr-1.5"></i>
+
+                                    <span>Ver recordatorio conceptual del Cuaderno 1</span>
+
+                                    <i id="hint-chevron" class="fa-solid fa-chevron-down ml-1.5 text-[10px] transition-transform"></i>
+
+                                </button>
+
+                                <div id="case-hint-box" class="hidden mt-2 bg-slate-100 p-3 rounded-lg text-xs text-slate-600 border border-slate-200">
+
+                                    <span id="case-hint-text"></span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- COLUMNA DERECHA (7 cols): Resolución en 4 Pasos Interactivos + Evaluación IA -->
+
+                <div class="lg:col-span-7 space-y-5">
+
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-6 space-y-6">
+
+                        <div class="border-b border-slate-200 pb-3 flex items-center justify-between">
+
+                            <div>
+
+                                <span class="text-xs font-bold uppercase tracking-wider text-cenco-cyan">Metodología Activa</span>
+
+                                <h3 class="text-lg font-bold text-cenco-navy">Resolución Técnica del Caso (4 Pasos)</h3>
+
+                            </div>
+
+                            <button onclick="resetCurrentCaseForm()" class="text-xs text-slate-500 hover:text-cenco-navy font-medium flex items-center cursor-pointer">
+
+                                <i class="fa-solid fa-rotate-left mr-1"></i> Limpiar respuestas
+
+                            </button>
+
+                        </div>
+
+
+
+                        <!-- PASO 1: Subsistema Previsional / Cobertura -->
+
+                        <div class="space-y-2">
+
+                            <label class="block text-sm font-bold text-cenco-navy">
+
+                                <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-cenco-navy text-white text-xs mr-2">1</span>
+
+                                Identifica el Subsistema Previsional y Cobertura Financiera aplicable:
+
+                            </label>
+
+                            <p class="text-xs text-slate-500 ml-8">Selecciona el mecanismo previsional o ley de protección financiera que rige este caso.</p>
+
+                            <div class="ml-0 sm:ml-8">
+
+                                <select id="step1-select" class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-sm text-slate-800 focus:border-cenco-corp focus:bg-white focus:outline-none focus:ring-2 focus:ring-cenco-corp/20 transition">
+
+                                    <!-- Opciones cargadas dinámicamente -->
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- PASO 2: Nivel de Atención y Nivel de Prevención -->
+
+                        <div class="space-y-2">
+
+                            <label class="block text-sm font-bold text-cenco-navy">
+
+                                <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-cenco-navy text-white text-xs mr-2">2</span>
+
+                                Determina el Nivel de Atención de la Red Asistencial y Nivel de Prevención:
+
+                            </label>
+
+                            <p class="text-xs text-slate-500 ml-8">Relaciona la complejidad asistencial del establecimiento con el nivel de prevención en salud.</p>
+
+                            <div class="ml-0 sm:ml-8">
+
+                                <select id="step2-select" class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-sm text-slate-800 focus:border-cenco-corp focus:bg-white focus:outline-none focus:ring-2 focus:ring-cenco-corp/20 transition">
+
+                                    <!-- Opciones cargadas dinámicamente -->
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- PASO 3: Institución Pública / Reguladora Competente -->
+
+                        <div class="space-y-2">
+
+                            <label class="block text-sm font-bold text-cenco-navy">
+
+                                <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-cenco-navy text-white text-xs mr-2">3</span>
+
+                                Identifica la Institución Pública, Fiscalizadora o Reguladora competente:
+
+                            </label>
+
+                            <p class="text-xs text-slate-500 ml-8">¿Qué organismo del Estado tiene el rol rector, regulador, abastecedor o fiscalizador principal en este dilema?</p>
+
+                            <div class="ml-0 sm:ml-8">
+
+                                <select id="step3-select" class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2.5 text-sm text-slate-800 focus:border-cenco-corp focus:bg-white focus:outline-none focus:ring-2 focus:ring-cenco-corp/20 transition">
+
+                                    <!-- Opciones cargadas dinámicamente -->
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- PASO 4: Desarrollo y Razonamiento Crítico del TNS en Farmacia -->
+
+                        <div class="space-y-2">
+
+                            <div class="flex flex-wrap items-center justify-between gap-2">
+
+                                <label for="step4-textarea" class="block text-sm font-bold text-cenco-navy">
+
+                                    <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-cenco-orange text-white text-xs mr-2">4</span>
+
+                                    Orientación Técnica, Ética y Razonamiento Crítico (TNS en Farmacia):
+
+                                </label>
+
+                                <span id="char-counter" class="text-[11px] font-medium text-slate-400">0 caracteres (Mín. sugerido: 80)</span>
+
+                            </div>
+
+                            <p class="text-xs text-slate-500 ml-8">
+
+                                Redacta con tus palabras qué le explicarías al paciente/usuario en el mesón de farmacia y justifica tu decisión según la normativa de la Unidad 1. <strong>No ingreses datos personales reales.</strong>
+
+                            </p>
+
+                            <div class="ml-0 sm:ml-8">
+
+                                <textarea id="step4-textarea" rows="4" oninput="updateCharCounter()" placeholder="Escribe aquí tu orientación como futuro TNS en Farmacia: explica al usuario cómo opera su cobertura, a qué establecimiento o nivel debe acudir, qué institución respalda su derecho o seguridad sanitaria y cuál es tu rol ético en el mesón..." class="w-full rounded-xl border border-slate-300 bg-slate-50 p-3.5 text-sm text-slate-800 focus:border-cenco-corp focus:bg-white focus:outline-none focus:ring-2 focus:ring-cenco-corp/20 transition"></textarea>
+
+
+
+                                <!-- Chips de apoyo conceptual para orientar la redacción -->
+
+                                <div class="mt-2 flex flex-wrap items-center gap-1.5">
+
+                                    <span class="text-[11px] text-slate-500 font-medium mr-1"><i class="fa-solid fa-tags text-cenco-cyan mr-1"></i>Términos sugeridos para incluir:</span>
+
+                                    <div id="suggested-terms-container" class="flex flex-wrap gap-1.5">
+
+                                        <!-- Se llena según el caso -->
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- Botón de Evaluación y Retroalimentación IA -->
+
+                        <div class="pt-2 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+
+                            <div class="text-xs text-slate-500 flex items-center">
+
+                                <i class="fa-solid fa-robot text-cenco-corp mr-2 text-base"></i>
+
+                                <span>Evaluación combinada: Opciones múltiples (60 pts) + Razonamiento escrito (40 pts).</span>
+
+                            </div>
+
+                            <button onclick="evaluateCurrentCase()" id="btn-evaluate-case" class="w-full sm:w-auto inline-flex items-center justify-center bg-cenco-orange hover:bg-cenco-orangeDark text-white font-bold text-sm px-6 py-3 rounded-xl shadow-md hover:shadow-lg transition cursor-pointer">
+
+                                <i class="fa-solid fa-check-double mr-2"></i>
+
+                                <span>Evaluar mi Caso y Recibir Retroalimentación IA</span>
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- ==========================================
+
+                         PANEL DE RESULTADOS Y RETROALIMENTACIÓN IA
+
+                    =========================================== -->
+
+                    <div id="feedback-container" class="hidden bg-white rounded-2xl shadow-md border-2 border-cenco-corp/30 overflow-hidden transition-all">
+
+                        <!-- Cabecera del Resultado -->
+
+                        <div class="bg-gradient-to-r from-cenco-navy to-cenco-corp text-white p-4 sm:p-5 flex flex-wrap items-center justify-between gap-4">
+
+                            <div class="flex items-center space-x-3">
+
+                                <div class="w-11 h-11 rounded-xl bg-white/15 flex items-center justify-center text-xl">
+
+                                    <i class="fa-solid fa-user-check text-cenco-orange"></i>
+
+                                </div>
+
+                                <div>
+
+                                    <span class="text-[11px] uppercase tracking-wider text-cenco-cyan font-bold block">Dictamen Formativo del Simulador</span>
+
+                                    <h4 class="text-base sm:text-lg font-bold">Retroalimentación Docente & IA</h4>
+
+                                </div>
+
+                            </div>
+
+                            <div class="bg-white text-cenco-navy px-4 py-2 rounded-xl text-center shadow-xs">
+
+                                <div class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Puntaje Obtenido</div>
+
+                                <div id="feedback-score" class="text-2xl font-extrabold text-cenco-navy">0 / 100</div>
+
+                            </div>
+
+                        </div>
+
+<!-- Desglose de Pasos 1, 2 y 3 + Retroalimentación IA Paso 4 -->
+
+                        <div class="p-4 sm:p-6 space-y-5">
+
+                            <!-- Resumen de Pasos 1 a 3 -->
+
+                            <div>
+
+                                <h5 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2.5">
+
+                                    1. Verificación de Parámetros Normativos (Pasos 1, 2 y 3)
+
+                                </h5>
+
+                                <div id="feedback-steps-list" class="space-y-2 text-xs sm:text-sm">
+
+                                    <!-- Se inyecta dinámicamente -->
+
+                                </div>
+
+                            </div>
+
+
+
+                            <!-- Análisis Formativo IA del Razonamiento Escrito (Paso 4) -->
+
+                            <div class="bg-cenco-light/50 rounded-xl p-4 border border-cenco-cyan/30 space-y-3">
+
+                                <div class="flex items-center justify-between">
+
+                                    <h5 class="text-xs sm:text-sm font-bold text-cenco-navy flex items-center">
+
+                                        <i class="fa-solid fa-wand-magic-sparkles text-cenco-corp mr-2"></i>
+
+                                        2. Análisis de tu Orientación como TNS en Farmacia (Paso 4)
+
+                                    </h5>
+
+                                    <span id="feedback-step4-pts" class="text-xs font-bold bg-cenco-navy text-white px-2.5 py-0.5 rounded-full">0 / 40 pts</span>
+
+                                </div>
+
+                                <div id="feedback-ai-text" class="text-xs sm:text-sm text-slate-700 leading-relaxed space-y-2">
+
+                                    <!-- Se inyecta retroalimentación detallada -->
+
+                                </div>
+
+                            </div>
+
+
+
+                            <!-- Pregunta Metacognitiva de Verificación (Cuaderno 1) -->
+
+                            <div class="bg-amber-50 border-l-4 border-cenco-orange p-4 rounded-r-xl">
+
+                                <div class="flex items-start space-x-3">
+
+                                    <i class="fa-solid fa-magnifying-glass-chart text-cenco-orange text-lg mt-0.5"></i>
+
+                                    <div>
+
+                                        <h5 class="text-xs font-bold uppercase tracking-wider text-amber-900">
+
+                                            Pregunta Metacognitiva de Verificación Académica
+
+                                        </h5>
+
+                                        <p class="text-xs font-semibold text-amber-800 mt-0.5">
+
+                                            ¿Qué elemento de esta respuesta debes contrastar con tu Cuaderno 1?
+
+                                        </p>
+
+                                        <p id="feedback-metacognitive" class="text-xs sm:text-sm text-amber-950 mt-1.5 leading-relaxed font-medium">
+
+                                            <!-- Pregunta metacognitiva generada -->
+
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+
+                            <!-- Botones de Acción Posterior -->
+
+                            <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
+
+                                <span class="text-xs text-emerald-700 font-medium flex items-center">
+
+                                    <i class="fa-solid fa-circle-check mr-1.5"></i> Progreso guardado automáticamente en tu Reporte Final.
+
+                                </span>
+
+                                <div class="flex items-center gap-2">
+
+                                    <button onclick="nextCase()" class="bg-cenco-navy hover:bg-cenco-corp text-white text-xs font-bold px-4 py-2 rounded-lg transition cursor-pointer">
+
+                                        Siguiente Caso <i class="fa-solid fa-arrow-right ml-1"></i>
+
+                                    </button>
+
+                                    <button onclick="switchTab('tab-reporte')" class="bg-slate-100 hover:bg-slate-200 text-cenco-navy text-xs font-bold px-4 py-2 rounded-lg transition cursor-pointer">
+
+                                        Ir a Mi Reporte <i class="fa-solid fa-file-export ml-1"></i>
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ==========================================
+
+             PESTAÑA 2: LABORATORIO DE INSTITUCIONALIDAD
+
+        =========================================== -->
+
+        <section id="tab-institucionalidad" class="hidden space-y-6">
+
+
+
+            <!-- Encabezado del Reto -->
+
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 sm:p-6">
+
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+
+                    <div>
+
+                        <span class="bg-cenco-light text-cenco-corp text-xs font-bold px-2.5 py-0.5 rounded-md">
+
+                            ENTRENAMIENTO DE CLASIFICACIÓN NORMATIVA
+
+                        </span>
+
+                        <h2 class="text-xl font-bold text-cenco-navy mt-1">
+
+                            Reto de Rol Farmacéutico: Institucionalidad en Salud en Chile
+
+                        </h2>
+
+                        <p class="text-xs sm:text-sm text-slate-600 mt-1">
+
+                            En cada una de las 6 situaciones prácticas del ámbito farmacéutico, selecciona qué entidad pública actúa principalmente (<strong>ISP, CENABAST, SEREMI de Salud, MINSAL, FONASA o Superintendencia de Salud</strong>).
+
+                        </p>
+
+                    </div>
+
+                    <div class="flex items-center space-x-4 bg-slate-50 px-4 py-3 rounded-xl border border-slate-200 flex-shrink-0">
+
+                        <div class="text-center">
+
+                            <div class="text-[10px] font-bold uppercase text-slate-400">Situaciones Resueltas</div>
+
+                            <div id="lab-progress-text" class="text-xl font-extrabold text-cenco-navy">0 / 6</div>
+
+                        </div>
+
+                        <div class="h-8 w-px bg-slate-200"></div>
+
+                        <div class="text-center">
+
+                            <div class="text-[10px] font-bold uppercase text-slate-400">Efectividad</div>
+
+                            <div id="lab-accuracy-text" class="text-xl font-extrabold text-cenco-corp">0%</div>
+
+                        </div>
+
+                        <button onclick="resetInstitutionalLab()" title="Reiniciar Laboratorio" class="text-slate-400 hover:text-cenco-navy p-1.5 rounded-lg transition cursor-pointer">
+
+                            <i class="fa-solid fa-rotate"></i>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Tarjetas de Referencia Rápida de Instituciones -->
+
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 mt-5 pt-4 border-t border-slate-100 text-xs">
+
+                    <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-200">
+
+                        <div class="font-bold text-cenco-navy">MINSAL</div>
+
+                        <div class="text-[11px] text-slate-500">Rectoría, políticas públicas, guías clínicas y decretos GES.</div>
+
+                    </div>
+
+                    <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-200">
+
+                        <div class="font-bold text-cenco-navy">SEREMI de Salud</div>
+
+                        <div class="text-[11px] text-slate-500">Autoridad sanitaria regional, autorización y fiscalización de farmacias.</div>
+
+                    </div>
+
+                    <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-200">
+
+                        <div class="font-bold text-cenco-navy">ISP (ANAMED)</div>
+
+                        <div class="text-[11px] text-slate-500">Registro sanitario de fármacos, farmacovigilancia y control de calidad.</div>
+
+                    </div>
+
+                    <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-200">
+
+                        <div class="font-bold text-cenco-navy">CENABAST</div>
+
+                        <div class="text-[11px] text-slate-500">Intermediación, compra agregada y distribución de fármacos e insumos.</div>
+
+                    </div>
+
+                    <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-200">
+
+                        <div class="font-bold text-cenco-navy">FONASA</div>
+
+                        <div class="text-[11px] text-slate-500">Seguro público de salud, recaudación 7% y modalidades MAI / MLE.</div>
+
+                    </div>
+
+                    <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-200">
+
+                        <div class="font-bold text-cenco-navy">SUPERINTENDENCIA</div>
+
+                        <div class="text-[11px] text-slate-500">Fiscaliza a ISAPRE y FONASA, cumplimiento GES, Ley de Derechos y Deberes.</div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Grid de las 6 Situaciones Prácticas -->
+
+            <div id="lab-situations-grid" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+                <!-- Se genera dinámicamente con JS -->
+
+            </div>
+
+
+
+        </section>
+
+
+
+        <!-- ==========================================
+
+             PESTAÑA 3: MI REPORTE DE SEGUIMIENTO Y DECLARACIÓN ÉTICA
+
+        =========================================== -->
+
+        <section id="tab-reporte" class="hidden space-y-6">
+
+
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+
+
+                <!-- COLUMNA IZQUIERDA (5 cols): Formulario de Reflexión y Compromiso Ético -->
+
+                <div class="lg:col-span-5 space-y-5 no-print">
+
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 space-y-4">
+
+                        <div class="border-b border-slate-100 pb-3">
+
+                            <span class="text-xs font-bold uppercase tracking-wider text-cenco-orange">Paso Final del Estudiante</span>
+
+                            <h2 class="text-lg font-bold text-cenco-navy">Configura tu Entregable para Aula Virtual</h2>
+
+                            <p class="text-xs text-slate-500 mt-0.5">
+
+                                Completa tu reflexión metacognitiva y marca la declaración de uso ético de IA para generar tu reporte oficial de la Unidad 1.
+
+                            </p>
+
+                        </div>
+
+
+
+                        <!-- Identificador del Estudiante -->
+
+                        <div>
+
+                            <label for="student-name" class="block text-xs font-bold text-cenco-navy uppercase tracking-wider mb-1">
+
+                                1. Identificador del Estudiante (Nombre o Iniciales + Sección)
+
+                            </label>
+
+                            <input type="text" id="student-name" oninput="updateReportPreview()" placeholder="Ej: M. González R. - Sección 102 TNS Farmacia" class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2 text-sm text-slate-800 focus:border-cenco-corp focus:bg-white focus:outline-none">
+
+                        </div>
+
+
+
+                        <!-- Cuadro de Reflexión y Contraste -->
+
+                        <div>
+
+                            <label for="student-reflection" class="block text-xs font-bold text-cenco-navy uppercase tracking-wider mb-1">
+
+                                2. Reflexión y Contraste Académico (Cuaderno 1)
+
+                            </label>
+
+                            <p class="text-[11px] text-slate-500 mb-1.5">
+
+                                ¿Qué concepto de la Unidad 1 reforzaste hoy y cómo verificaste la información entregada por la IA con el material de la asignatura?
+
+                            </p>
+
+                            <textarea id="student-reflection" rows="4" oninput="updateReportPreview()" placeholder="Ej: Hoy reforcé las diferencias entre las funciones del ISP (registro sanitario y farmacovigilancia) y CENABAST (abastecimiento e intermediación). Contrasté la retroalimentación del simulador revisando el esquema de organismos autónomos y descentralizados del Cuaderno 1..." class="w-full rounded-xl border border-slate-300 bg-slate-50 p-3 text-sm text-slate-800 focus:border-cenco-corp focus:bg-white focus:outline-none"></textarea>
+
+                        </div>
+
+
+
+                        <!-- Casillas de Verificación de Declaración Ética -->
+
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2.5">
+
+                            <div class="text-xs font-bold text-cenco-navy uppercase tracking-wider mb-1 flex items-center">
+
+                                <i class="fa-solid fa-shield-check text-cenco-orange mr-1.5"></i>
+
+                                3. Declaración de Integridad y Uso Ético de IA
+
+                            </div>
+
+
+
+                            <label class="flex items-start space-x-2.5 text-xs text-slate-700 cursor-pointer">
+
+                                <input type="checkbox" id="ethic-check-1" onchange="updateReportPreview()" class="mt-0.5 rounded border-slate-300 text-cenco-corp focus:ring-cenco-corp">
+
+                                <span><strong>Práctica Formativa y Privacidad:</strong> Utilicé este simulador exclusivamente con fines formativos y no ingresé datos personales ni sensibles de pacientes reales.</span>
+
+                            </label>
+
+
+
+                            <label class="flex items-start space-x-2.5 text-xs text-slate-700 cursor-pointer">
+
+                                <input type="checkbox" id="ethic-check-2" onchange="updateReportPreview()" class="mt-0.5 rounded border-slate-300 text-cenco-corp focus:ring-cenco-corp">
+
+                                <span><strong>Verificación en Fuentes Oficiales:</strong> Contrasté la retroalimentación automatizada con el Cuaderno 1 de la asignatura y la normativa vigente (MINSAL, ISP, CENABAST, Superintendencia de Salud).</span>
+
+                            </label>
+
+
+
+                            <label class="flex items-start space-x-2.5 text-xs text-slate-700 cursor-pointer">
+
+                                <input type="checkbox" id="ethic-check-3" onchange="updateReportPreview()" class="mt-0.5 rounded border-slate-300 text-cenco-corp focus:ring-cenco-corp">
+
+                                <span><strong>Autoría y Criterio Propio:</strong> Las justificaciones técnicas y reflexiones registradas corresponden a mi elaboración personal como estudiante de TNS en Farmacia.</span>
+
+                            </label>
+
+                        </div>
+
+
+
+                        <!-- Botones de Acción de Exportación -->
+
+                        <div class="pt-2 flex flex-col sm:flex-row gap-2.5">
+
+                            <button onclick="copyReportToClipboard()" class="flex-1 bg-cenco-orange hover:bg-cenco-orangeDark text-white font-bold text-xs sm:text-sm py-3 px-4 rounded-xl shadow-sm transition flex items-center justify-center cursor-pointer">
+
+                                <i class="fa-solid fa-copy mr-2"></i>
+
+                                <span>Generar y Copiar Reporte para Aula Virtual</span>
+
+                            </button>
+
+                            <button onclick="window.print()" class="bg-cenco-navy hover:bg-cenco-corp text-white font-bold text-xs sm:text-sm py-3 px-4 rounded-xl shadow-sm transition flex items-center justify-center cursor-pointer">
+
+                                <i class="fa-solid fa-print mr-2"></i>
+
+                                <span>Imprimir / Guardar PDF</span>
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- COLUMNA DERECHA (7 cols): Vista Previa del Comprobante / Entregable -->
+
+                <div class="lg:col-span-7">
+
+                    <div id="printable-report" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8 print-card space-y-6">
+
+
+
+                        <!-- Cabecera del Comprobante con Logo Oficial CFT CENCO -->
+
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b-2 border-cenco-navy pb-4">
+
+                            <div class="flex items-center gap-3.5">
+
+                                <!-- Logo CFT CENCO en contenedor institucional para visualización e impresión PDF -->
+
+                                <div class="bg-cenco-navy px-3 py-2 rounded-xl flex-shrink-0">
+
+                                    <svg width="125" height="65" viewBox="0 0 1000 520" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Logo CFT CENCO Reporte">
+
+                                        <defs>
+
+                                            <linearGradient id="cencoArcGradReport" x1="340" y1="260" x2="640" y2="20" gradientUnits="userSpaceOnUse">
+
+                                                <stop offset="0%" stop-color="#F39200" />
+
+                                                <stop offset="55%" stop-color="#F9B218" />
+
+                                                <stop offset="100%" stop-color="#FDE021" />
+
+                                            </linearGradient>
+
+                                        </defs>
+
+                                        <g stroke="#FFFFFF" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" fill="none">
+
+                                            <path d="M 176 156 H 136 A 38 38 0 0 0 98 194 V 202 A 38 38 0 0 0 136 240 H 176" />
+
+                                            <path d="M 248 114 H 224 A 24 24 0 0 0 200 138 V 240" />
+
+                                            <path d="M 182 166 H 242" />
+
+                                            <path d="M 276 122 V 214 A 26 26 0 0 0 302 240 H 326" />
+
+                                            <path d="M 254 166 H 314" />
+
+                                        </g>
+
+                                        <path d="M 608 22 C 510 -8, 392 52, 355 152 C 326 230, 392 285, 488 262 C 555 245, 616 172, 628 112 C 632 92, 605 90, 566 118 C 520 152, 492 212, 434 212 C 384 212, 366 168, 386 124 C 414 62, 482 32, 536 38 C 568 41, 618 30, 608 22 Z" fill="url(#cencoArcGradReport)" />
+
+                                        <path d="M 372 150 L 492 92" stroke="#FBB03B" stroke-width="32" stroke-linecap="round" />
+
+                                        <path d="M 440 74 L 495 90 L 434 176" stroke="#FBB03B" stroke-width="32" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+
+                                        <g stroke="#F39200" stroke-width="28" stroke-linecap="round" stroke-linejoin="round" fill="none">
+
+                                            <path d="M 510 308 H 332 A 48 48 0 0 0 332 404 H 382" />
+
+                                            <path d="M 505 356 H 412 V 404 H 548 V 308 L 674 404 V 308" />
+
+                                            <path d="M 814 308 H 758 A 48 48 0 0 0 758 404 H 938 A 48 48 0 0 0 938 308 H 890 A 48 48 0 0 0 890 404" />
+
+                                        </g>
+
+                                        <line x1="12" y1="454" x2="988" y2="454" stroke="#F39200" stroke-width="7" stroke-linecap="round" />
+
+                                        <text x="500" y="502" text-anchor="middle" fill="#FFFFFF" font-family="'Plus Jakarta Sans', 'Inter', sans-serif" font-weight="600" font-size="31" letter-spacing="13.5">CENTRO DE FORMACIÓN TÉCNICA</text>
+
+                                    </svg>
+
+                                </div>
+
+                                <div>
+
+                                    <div class="text-xs font-extrabold text-cenco-orange uppercase tracking-wider">CFT CENCO • ESCUELA DE SALUD</div>
+
+                                    <h3 class="text-lg sm:text-xl font-extrabold text-cenco-navy">
+
+                                        Reporte de Simulación Formativa — Unidad 1
+
+                                    </h3>
+
+                                    <p class="text-xs text-slate-600">
+
+                                        Carrera: <strong>TNS en Farmacia</strong> | Asignatura: <strong>Sistema de Salud en Chile</strong>
+
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                            <div class="text-left sm:text-right text-xs text-slate-500">
+
+                                <div><strong>Fecha:</strong> <span id="report-date"></span></div>
+
+                                <div><strong>Código Verificación:</strong> <span id="report-code" class="font-mono font-bold text-cenco-navy"></span></div>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- Datos del Estudiante y Resumen de Desempeño -->
+
+                        <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
+
+                            <div class="sm:col-span-2">
+
+                                <div class="text-[10px] font-bold uppercase text-slate-400">Estudiante Identificado</div>
+
+                                <div id="preview-student-name" class="text-sm font-bold text-cenco-navy mt-0.5">Sin especificar</div>
+
+                            </div>
+
+                            <div>
+
+                                <div class="text-[10px] font-bold uppercase text-slate-400">Casos Resueltos</div>
+
+                                <div id="preview-cases-summary" class="text-sm font-extrabold text-cenco-corp mt-0.5">0 de 5 (Prom: 0 pts)</div>
+
+                            </div>
+
+                            <div>
+
+                                <div class="text-[10px] font-bold uppercase text-slate-400">Reto Institucional</div>
+
+                                <div id="preview-lab-summary" class="text-sm font-extrabold text-cenco-navy mt-0.5">0% completado</div>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- Tabla Detallada de Casos Clínico-Previsionales -->
+
+                        <div>
+
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-cenco-navy mb-2 flex items-center">
+
+                                <i class="fa-solid fa-list-check text-cenco-corp mr-1.5"></i>
+
+                                1. Desglose de Casos Simulados en Farmacia
+
+                            </h4>
+
+                            <div class="overflow-x-auto border border-slate-200 rounded-xl">
+
+                                <table class="w-full text-left border-collapse text-xs">
+
+                                    <thead>
+
+                                        <tr class="bg-slate-100 text-cenco-navy border-b border-slate-200">
+
+                                            <th class="py-2.5 px-3 font-bold">Caso Simulado</th>
+
+                                            <th class="py-2.5 px-3 font-bold">Estado</th>
+
+                                            <th class="py-2.5 px-3 font-bold">Puntaje</th>
+
+                                            <th class="py-2.5 px-3 font-bold">Extracto Orientación TNS</th>
+
+                                        </tr>
+
+                                    </thead>
+
+                                    <tbody id="report-cases-tbody" class="divide-y divide-slate-200">
+
+                                        <!-- Filas dinámicas -->
+
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- Reflexión Metacognitiva del Estudiante -->
+
+                        <div>
+
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-cenco-navy mb-2 flex items-center">
+
+                                <i class="fa-solid fa-book-open-reader text-cenco-corp mr-1.5"></i>
+
+                                2. Reflexión Académica y Contraste con Cuaderno 1
+
+                            </h4>
+
+                            <div id="preview-reflection-box" class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-xs text-slate-700 leading-relaxed italic">
+
+                                Pendiente de redactar por el estudiante en el panel izquierdo...
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- Declaración de Uso Ético y Transparente de IA -->
+
+                        <div class="bg-cenco-light/60 p-4 rounded-xl border border-cenco-cyan/30">
+
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-cenco-navy mb-2 flex items-center">
+
+                                <i class="fa-solid fa-scale-balanced text-cenco-orange mr-1.5"></i>
+
+                                3. Declaración Obligatoria de Uso Ético de Inteligencia Artificial
+
+                            </h4>
+
+                            <div id="preview-ethics-status" class="text-xs text-slate-700 space-y-1">
+
+                                <!-- Se actualiza según checkboxes -->
+
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+
+                </div>
+
+
+
+            </div>
+
+        </section>
+
+
+
+    </main>
+
+
+
+    <!-- ==========================================
+
+         PIE DE PÁGINA INSTITUCIONAL
+
+    =========================================== -->
+
+    <footer class="bg-white border-t border-slate-200 mt-12 py-6 no-print">
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+
+            <div class="flex items-center space-x-2">
+
+                <span class="font-bold text-cenco-navy">CFT CENCO</span>
+
+                <span>•</span>
+
+                <span>Centro de Formación Técnica • Carrera TNS en Farmacia</span>
+
+            </div>
+
+            <div class="text-center sm:text-right">
+
+                Recurso educativo alineado con <strong>Unidad 1: Organización, Estructura y Previsión del Sistema de Salud en Chile</strong>.
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+
+    <!-- ==========================================
+
+         MODAL DEL PROTOCOLO ÉTICO E IA RESPONSABLE
+
+    =========================================== -->
+
+    <div id="ethical-modal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 no-print">
+
+        <div class="bg-white rounded-2xl max-w-2xl w-full shadow-2xl border border-slate-200 overflow-hidden animate-fade-in">
+
+            <!-- Modal Header -->
+
+            <div class="bg-cenco-navy text-white px-6 py-4 flex items-center justify-between">
+
+                <div class="flex items-center space-x-2.5">
+
+                    <div class="w-9 h-9 rounded-lg bg-cenco-orange flex items-center justify-center text-white">
+
+                        <i class="fa-solid fa-shield-halved text-lg"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span class="text-[10px] font-bold uppercase tracking-widest text-cenco-cyan block">Protocolo Académico CFT CENCO</span>
+
+                        <h3 class="text-base sm:text-lg font-bold">Compromiso Ético y Uso Responsable de IA</h3>
+
+                    </div>
+
+                </div>
+
+                <button onclick="closeEthicalModal()" class="text-slate-300 hover:text-white p-1 rounded-lg transition cursor-pointer">
+
+                    <i class="fa-solid fa-xmark text-xl"></i>
+
+                </button>
+
+            </div>
+
+
+
+            <!-- Modal Body: Los 4 Pilares Éticos -->
+
+            <div class="p-6 space-y-4 text-xs sm:text-sm text-slate-700">
+
+                <p class="text-slate-600 leading-relaxed">
+
+                    Bienvenido/a al <strong>Simulador Formativo de la Unidad 1</strong> de la asignatura <em>Sistema de Salud en Chile</em>. Antes de interactuar con los casos clínicos y el asistente de retroalimentación IA, revisa los <strong>4 pilares éticos exigidos a todo futuro TNS en Farmacia</strong>:
+
+                </p>
+
+
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+
+                    <!-- Pilar 1 -->
+
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-1.5">
+
+                        <div class="flex items-center font-bold text-cenco-navy">
+
+                            <span class="w-6 h-6 rounded-full bg-cenco-navy text-white text-xs inline-flex items-center justify-center mr-2">a</span>
+
+                            Privacidad de Datos
+
+                        </div>
+
+                        <p class="text-xs text-slate-600 leading-relaxed">
+
+                            <strong>Prohibición de datos sensibles:</strong> Nunca ingreses nombres, RUT, diagnósticos ni antecedentes clínicos de pacientes reales o familiares (Ley N° 20.584 y Ley N° 19.628).
+
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- Pilar 2 -->
+
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-1.5">
+
+                        <div class="flex items-center font-bold text-cenco-navy">
+
+                            <span class="w-6 h-6 rounded-full bg-cenco-corp text-white text-xs inline-flex items-center justify-center mr-2">b</span>
+
+                            Verificación Académica
+
+                        </div>
+
+                        <p class="text-xs text-slate-600 leading-relaxed">
+
+                            <strong>Contraste documental:</strong> Contrasta siempre la retroalimentación de la IA con el <strong>Cuaderno 1 de la asignatura</strong> y fuentes oficiales (MINSAL, ISP, CENABAST, Superintendencia de Salud).
+
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- Pilar 3 -->
+
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-1.5">
+
+                        <div class="flex items-center font-bold text-cenco-navy">
+
+                            <span class="w-6 h-6 rounded-full bg-cenco-cyan text-white text-xs inline-flex items-center justify-center mr-2">c</span>
+
+                            Pensamiento Crítico
+
+                        </div>
+
+                        <p class="text-xs text-slate-600 leading-relaxed">
+
+                            <strong>Autonomía profesional:</strong> La IA apoya tu entrenamiento formativo, pero el criterio técnico, normativo y ético en el mesón de farmacia pertenece al futuro TNS en Farmacia.
+
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- Pilar 4 -->
+
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-1.5">
+
+                        <div class="flex items-center font-bold text-cenco-navy">
+
+                            <span class="w-6 h-6 rounded-full bg-cenco-orange text-white text-xs inline-flex items-center justify-center mr-2">d</span>
+
+                            Transparencia Académica
+
+                        </div>
+
+                        <p class="text-xs text-slate-600 leading-relaxed">
+
+                            <strong>Declaración explícita:</strong> Todo estudiante tiene la obligación de incluir la declaración de uso de IA y su reflexión verificada en el reporte final para el Aula Virtual.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Modal Footer -->
+
+            <div class="bg-slate-50 px-6 py-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3">
+
+                <span class="text-xs text-slate-500 flex items-center">
+
+                    <i class="fa-solid fa-circle-info text-cenco-corp mr-1.5"></i> Puedes volver a consultar este protocolo en cualquier momento desde la cabecera.
+
+                </span>
+
+                <button onclick="closeEthicalModal()" class="w-full sm:w-auto bg-cenco-navy hover:bg-cenco-corp text-white font-bold text-xs sm:text-sm px-6 py-2.5 rounded-xl shadow-sm transition cursor-pointer">
+
+                    Comprendo y Acepto el Protocolo Ético
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ==========================================
+
+         NOTIFICACIÓN FLOTANTE (TOAST SIN ALERT)
+
+    =========================================== -->
+
+    <div id="toast-notification" class="fixed bottom-5 right-5 z-50 hidden bg-cenco-navy text-white px-4 py-3 rounded-xl shadow-xl border border-white/15 flex items-center space-x-3 max-w-sm no-print">
+
+        <i id="toast-icon" class="fa-solid fa-circle-check text-cenco-orange text-lg"></i>
+
+        <span id="toast-message" class="text-xs sm:text-sm font-medium">Acción completada.</span>
+
+    </div>
+
+
+
+    <!-- ==========================================
+
+         LÓGICA DE LA APLICACIÓN Y GEMINI API
+
+    =========================================== -->
+
+    <script>
+
+        // Config de Gemini API según instrucciones del entorno
+
+        const apiKey = "";
+
+        const GEMINI_MODEL = "gemini-3-flash-preview";
+
+
+
+        // Opciones Estandarizadas para los Selectores de los 4 Pasos
+
+        const STEP1_OPTIONS = [
+
+            { value: "", label: "-- Selecciona el Subsistema Previsional / Cobertura aplicable --" },
+
+            { value: "FONASA_MAI_GES_COPAGO_CERO", label: "FONASA Modalidad Atención Institucional (MAI) + Garantías GES/AUGE y Copago Cero" },
+
+            { value: "LEY_16744_MUTUAL_ISL", label: "Seguro Social Ley N° 16.744 (Accidentes del Trabajo y Trayecto - Mutualidades / ISL)" },
+
+            { value: "REGULACION_SANITaria_FARMACOVIGILANCIA", label: "Sistema Público de Abastecimiento y Regulación Sanitaria (Cobertura programática red pública)" },
+
+            { value: "ISAPRE_LEY_RICARTE_SOTO", label: "ISAPRE + Sistema de Protección Financiera Ley N° 20.850 (Ley Ricarte Soto - Universal)" },
+
+            { value: "FONASA_APS_PROGRAMA_NACIONAL", label: "FONASA MAI / Programa Nacional de Inmunizaciones (PNI) y Control de Salud Infantil en APS" },
+
+            { value: "FONASA_MLE_LIBRE_ELECCION", label: "FONASA Modalidad Libre Elección (MLE) mediante compra de bono en farmacia privada" }
+
+        ];
+
+
+
+        const STEP2_OPTIONS = [
+
+            { value: "", label: "-- Selecciona el Nivel de Atención y Nivel de Prevención --" },
+
+            { value: "PRIMARIO_APS_SECUNDARIA", label: "Nivel Primario de Atención (CESFAM / APS) — Prevención Secundaria y Control Crónico" },
+
+            { value: "URGENCIA_MUTUAL_SECUNDARIA_TERCIARIA", label: "Red de Salud Laboral / Atención de Urgencia y Rehabilitación — Prevención Secundaria/Terciaria" },
+
+            { value: "TRANSVERSAL_FARMACIA_PRIMARIA", label: "Nivel Primario/Transversal en Farmacia Asistencial — Prevención Primaria y Seguridad del Paciente" },
+
+            { value: "TERCIARIO_HOSPITAL_TERCIARIA", label: "Nivel Terciario de Alta Complejidad (Hospital / Centro de Referencia) — Prevención Terciaria" },
+
+            { value: "PRIMARIO_POSTA_SECUNDARIO_CDT", label: "Nivel Primario (Posta Rural / CESFAM - Prevención Primaria) con derivación a Nivel Secundario (CRS/CDT)" }
+
+        ];
+
+
+
+        const STEP3_OPTIONS = [
+
+            { value: "", label: "-- Selecciona la Institución Pública / Reguladora competente --" },
+
+            { value: "FONASA_SUPERINTENDENCIA", label: "FONASA (Financiamiento) y Superintendencia de Salud (Fiscalización de Garantías GES)" },
+
+            { value: "MUTUALIDADES_ISL_SUSESO", label: "Mutualidades de Empleadores (ACHS, Mutual, IST) o ISL, fiscalizados por SUSESO / MINSAL" },
+
+            { value: "ISP_CENABAST_SEREMI", label: "ISP / ANAMED (Alerta de Farmacovigilancia), CENABAST (Intermediación/Compra) y SEREMI de Salud" },
+
+            { value: "MINSAL_FONASA_RICARTE_SOTO", label: "MINSAL (Decreto patologías Ley 20.850), FONASA (Fondo Universal) y Superintendencia de Salud" },
+
+            { value: "MINSAL_SERVICIO_SALUD_APS", label: "MINSAL (Rectoría PNI) y Servicio de Salud respectivo (Gestión de Red APS - Referencia a CDT/CRS)" }
+
+        ];
+
+
+
+        // Base de Datos de los 5 Casos Clínicos-Previsionales Preconfigurados de la Unidad 1
+
+        const CASES_DATA = [
+
+            {
+
+                id: 1,
+
+                tag: "Caso 1 • FONASA, GES y Copago Cero",
+
+                shortTitle: "Adulto Mayor FONASA B y GES",
+
+                title: "Adulto mayor FONASA Tramo B con Hipertensión y Diabetes consulta por GES y Copago Cero",
+
+                context: "Farmacia de un Centro de Salud Familiar (CESFAM) municipalizado perteneciente a la Atención Primaria de Salud (APS).",
+
+                profile: "Don Roberto (68 años), beneficiario de FONASA Tramo B, diagnosticado con Hipertensión Arterial primaria y Diabetes Mellitus Tipo 2.",
+
+                query: "«Señorita/Joven, vengo a retirar mi Losartán y Metformina de mi control crónico, pero mi vecino me dijo que ahora en el CESFAM me van a cobrar un copago por los remedios del AUGE/GES y que si se demoran no tengo dónde reclamar. ¿Es verdad que debo pagar?»",
+
+                dilemma: "¿Cómo opera la cobertura financiera de FONASA en Modalidad de Atención Institucional (MAI) con Copago Cero y cuáles son las 4 garantías exigibles del régimen GES/AUGE para sus patologías crónicas?",
+
+                hint: "Recuerda (Cuaderno 1): En FONASA existen 4 tramos (A, B, C y D). En la Modalidad de Atención Institucional (MAI - red pública), rige el Copago Cero (gratuidad total en prestaciones y medicamentos de la red pública para tramos A, B, C y D). Además, HTA y Diabetes Tipo 2 son patologías GES con 4 garantías: Acceso, Oportunidad, Protección Financiera y Calidad.",
+
+                correctStep1: "FONASA_MAI_GES_COPAGO_CERO",
+
+                correctStep2: "PRIMARIO_APS_SECUNDARIA",
+
+                correctStep3: "FONASA_SUPERINTENDENCIA",
+
+                suggestedTerms: ["FONASA Tramo B", "Modalidad Atención Institucional (MAI)", "Copago Cero", "Garantías GES/AUGE", "Superintendencia de Salud", "APS / CESFAM"],
+
+                keywords: ["fonasa", "mai", "institucional", "copago cero", "gratuito", "gratis", "ges", "auge", "garantía", "acceso", "oportunidad", "calidad", "protección financiera", "superintendencia", "primario", "cesfam"],
+
+                metacognitiveQuestion: "Revisa en tu Cuaderno 1 la diferencia entre la Modalidad de Atención Institucional (MAI) y la Modalidad de Libre Elección (MLE) de FONASA: ¿Qué tramos de FONASA pueden acceder a la MLE y cómo opera el Copago Cero en la red pública?"
+
+            },
+
+            {
+
+                id: 2,
+
+                tag: "Caso 2 • Ley 16.744 y Salud Laboral",
+
+                shortTitle: "Accidente de Trayecto (Ley 16.744)",
+
+                title: "Trabajador sufre accidente de trayecto laboral y consulta por cobertura de medicamentos",
+
+                context: "Mesón de una Farmacia Comunitaria cercana a una estación de metro en horario matutino.",
+
+                profile: "Camila (31 años), trabajadora con contrato vigente (cotizante en ISAPRE para salud común), quien sufrió una torcedura grave de tobillo mientras se dirigía directamente desde su domicilio hacia su lugar de trabajo.",
+
+                query: "«Me acabo de caer saliendo hacia mi trabajo. Quiero comprar un antiinflamatorio ahora con mi ISAPRE e ir a una clínica privada, porque creo que el seguro del trabajo solo cubre accidentes dentro de la empresa y no los medicamentos. ¿Qué me recomienda hacer?»",
+
+                dilemma: "¿Qué seguro previsional cubre un accidente de trayecto directo, qué instituciones administran esta ley y cómo opera la entrega de medicamentos y atención médica?",
+
+                hint: "Recuerda (Cuaderno 1): La Ley N° 16.744 cubre Accidentes del Trabajo, Accidentes de Trayecto (directo entre habitación y lugar de trabajo) y Enfermedades Profesionales. Es administrada por las Mutualidades de Empleadores (ACHS, Mutual de Seguridad, IST) o el Instituto de Seguridad Laboral (ISL), otorgando cobertura 100% gratuita en atención médica, hospitalización, medicamentos y rehabilitación, independiente de si el trabajador es FONASA o ISAPRE.",
+
+                correctStep1: "LEY_16744_MUTUAL_ISL",
+
+                correctStep2: "URGENCIA_MUTUAL_SECUNDARIA_TERCIARIA",
+
+                correctStep3: "MUTUALIDADES_ISL_SUSESO",
+
+                suggestedTerms: ["Ley 16.744", "Accidente de Trayecto", "Mutualidad (ACHS/IST/Mutual) o ISL", "Cobertura 100% Medicamentos", "No usar ISAPRE común", "Medios de prueba"],
+
+                keywords: ["16.744", "16744", "trayecto", "mutual", "isl", "achs", "ist", "laboral", "trabajo", "gratuito", "100%", "medicamentos", "empleador", "diat"],
+
+                metacognitiveQuestion: "Contrasta con tu Cuaderno 1: ¿Cuáles son las prestaciones médicas y económicas que garantiza la Ley N° 16.744 y qué diferencia existe entre la administración del ISL y las Mutualidades de Empleadores?"
+
+            },
+
+            {
+
+                id: 3,
+
+                tag: "Caso 3 • ISP, CENABAST y SEREMI",
+
+                shortTitle: "Alerta Sanitaria ISP vs CENABAST",
+
+                title: "Alerta de farmacovigilancia por lote defectuoso de Amoxicilina y consulta por abastecimiento",
+
+                context: "Farmacia Asistencial de un centro de salud de la red pública donde llega un oficio de retiro de mercado de un lote específico de Amoxicilina suspensión.",
+
+                profile: "Químico Farmacéutico y TNS en Farmacia del establecimiento; además consulta un usuario preocupado por la calidad del medicamento y la disponibilidad de stock.",
+
+                query: "«Escuché en las noticias que hay un lote de Amoxicilina con problemas de calidad y que además faltan insumos. ¿Es CENABAST quien retira los medicamentos peligrosos del mercado o es la SEREMI quien fabrica los remedios en Chile?»",
+
+                dilemma: "¿Cómo se diferencian técnicamente los roles del ISP (ANAMED), CENABAST y la SEREMI de Salud frente a una alerta de farmacovigilancia y el abastecimiento de medicamentos?",
+
+                hint: "Recuerda (Cuaderno 1): El Instituto de Salud Pública (ISP), a través de ANAMED, es la agencia encargada del registro sanitario, control de calidad de lotes, farmacovigilancia y emisión de alertas/retiros de medicamentos. CENABAST es el organismo descentralizado encargado de intermediar y gestionar la compra y distribución de fármacos e insumos para la red pública (y Ley Cenabast). La SEREMI de Salud fiscaliza en terreno el cumplimiento sanitario de las farmacias.",
+
+                correctStep1: "REGULACION_SANITaria_FARMACOVIGILANCIA",
+
+                correctStep2: "TRANSVERSAL_FARMACIA_PRIMARIA",
+
+                correctStep3: "ISP_CENABAST_SEREMI",
+
+                suggestedTerms: ["ISP / ANAMED", "Farmacovigilancia", "Cuarentena de Lote", "CENABAST (Abastecimiento)", "SEREMI de Salud (Fiscalización)", "Registro Sanitario"],
+
+                keywords: ["isp", "anamed", "farmacovigilancia", "lote", "retiro", "cuarentena", "cenabast", "abastecimiento", "compra", "seremi", "fiscaliza", "calidad", "registro"],
+
+                metacognitiveQuestion: "Verifica en el Cuaderno 1 el cuadro de Organismos Autónomos y Descentralizados del MINSAL: ¿Qué funciones específicas cumplen el ISP y la CENABAST dentro de la cadena del medicamento en Chile?"
+
+            },
+
+            {
+
+                id: 4,
+
+                tag: "Caso 4 • ISAPRE y Ley Ricarte Soto",
+
+                shortTitle: "Patología Alto Costo (Ley 20.850)",
+
+                title: "Paciente afiliado a ISAPRE consulta por tratamiento de alto costo bajo la Ley Ricarte Soto",
+
+                context: "Farmacia de Especialidades de un Hospital de Alta Complejidad (Nivel Terciario de Atención).",
+
+                profile: "Andrés (42 años), afiliado a una ISAPRE, recientemente confirmado con diagnóstico de Esclerosis Múltiple Recurrente Remitente que requiere terapia biológica de alto costo.",
+
+                query: "«En mi trabajo me dijeron que como estoy en ISAPRE y gano un sueldo medio, la Ley Ricarte Soto no me cubre estos medicamentos millonarios y que esa ley es solo para personas de FONASA Tramo A. ¿Es efectivo eso?»",
+
+                dilemma: "¿Cuál es el alcance previsional de la Ley N° 20.850 (Ley Ricarte Soto) y en qué nivel de complejidad de la red asistencial se gestionan estas terapias de alto costo?",
+
+                hint: "Recuerda (Cuaderno 1): La Ley N° 20.850 (Ley Ricarte Soto) es un Sistema de Protección Financiera Universal para Diagnósticos y Tratamientos de Alto Costo (medicamentos, dispositivos médicos y alimentos de alto costo). Es UNIVERSAL: cubre a todos los beneficiarios de FONASA, ISAPRE y Fuerzas Armadas (CAPREDENA/DIPRECA), sin importar su situación socioeconómica, cuando el tratamiento supera el umbral legal y está decretado.",
+
+                correctStep1: "ISAPRE_LEY_RICARTE_SOTO",
+
+                correctStep2: "TERCIARIO_HOSPITAL_TERCIARIA",
+
+                correctStep3: "MINSAL_FONASA_RICARTE_SOTO",
+
+                suggestedTerms: ["Ley 20.850 (Ricarte Soto)", "Cobertura Universal", "Incluye ISAPRE, FONASA y FF.AA.", "Nivel Terciario / Alta Complejidad", "Red de Prestadores Aprobados", "Alto Costo"],
+
+                keywords: ["ricarte soto", "20.850", "20850", "universal", "isapre", "fonasa", "alto costo", "terciario", "hospital", "complejidad", "fuerzas armadas", "financiera"],
+
+                metacognitiveQuestion: "Revisa en tu Cuaderno 1 la sección de Ley Ricarte Soto (Ley N° 20.850): ¿Por qué se denomina un sistema de protección financiera 'universal' y qué tipos de tecnologías sanitarias cubre (fármacos, alimentos, dispositivos)?"
+
+            },
+
+            {
+
+                id: 5,
+
+                tag: "Caso 5 • Niveles de Atención y Prevención",
+
+                shortTitle: "APS, Vacunación y Red Asistencial",
+
+                title: "Madre consulta en CESFAM por vacunación PNI y derivación a médico especialista en CDT/CRS",
+
+                context: "Farmacia y vacunatorio de un CESFAM / Posta de Salud Rural perteneciente al Sistema Nacional de Servicios de Salud (SNSS).",
+
+                profile: "Sra. Elena, madre de un niño de 7 años que acude a vacunación escolar y control de niño sano, y que además tiene una interconsulta pendiente para neurología infantil.",
+
+                query: "«Tengo dos dudas: primero, ¿por qué las vacunas del programa ministerial son gratis aquí en el CESFAM? Y segundo, el médico general derivó a mi hijo a un neurólogo en el CRS/CDT del hospital; ¿por qué no lo ve el especialista aquí mismo en la posta?»",
+
+                dilemma: "¿Cómo se articulan los Niveles de Atención (Primario, Secundario y Terciario) mediante el sistema de Referencia y Contrarreferencia, y a qué Nivel de Prevención corresponde la vacunación?",
+
+                hint: "Recuerda (Cuaderno 1): El Nivel Primario (CESFAM, CECOSF, Postas Rurales) es la puerta de entrada al sistema, enfocado en Promoción y Prevención Primaria (como el Programa Nacional de Inmunizaciones - PNI). El Nivel Secundario (CRS y CDT) brinda atención ambulatoria de especialidades mediante interconsulta (Referencia). El Nivel Terciario corresponde a Hospitales de alta complejidad (hospitalización y cirugía compleja).",
+
+                correctStep1: "FONASA_APS_PROGRAMA_NACIONAL",
+
+                correctStep2: "PRIMARIO_POSTA_SECUNDARIO_CDT",
+
+                correctStep3: "MINSAL_SERVICIO_SALUD_APS",
+
+                suggestedTerms: ["Nivel Primario (APS / CESFAM)", "Prevención Primaria (Vacunación PNI)", "Nivel Secundario (CRS / CDT)", "Referencia y Contrarreferencia", "Baja vs Mediana Complejidad", "Puerta de Entrada"],
+
+                keywords: ["primario", "aps", "cesfam", "posta", "prevención primaria", "vacuna", "pni", "secundario", "crs", "cdt", "especialista", "interconsulta", "referencia", "terciario"],
+
+                metacognitiveQuestion: "Contrasta con el Cuaderno 1: ¿Qué establecimientos componen cada uno de los tres Niveles de Atención (Primario, Secundario y Terciario) y cómo se diferencian los Niveles de Prevención Primaria, Secundaria y Terciaria?"
+
+            }
+
+        ];
+
+
+
+        // Banco de Situaciones del Laboratorio de Institucionalidad (Pestaña 2)
+
+        const LAB_SITUATIONS = [
+
+            {
+
+                id: 101,
+
+                title: "Situación 1: Registro Sanitario y Alerta de Farmacovigilancia",
+
+                scenario: "Un laboratorio farmacéutico solicita autorización para comercializar un nuevo bioequivalente en Chile, y paralelamente se investiga una reacción adversa grave reportada por una farmacia hospitalaria.",
+
+                correctEntity: "ISP",
+
+                normativeExplanation: "Correcto. El Instituto de Salud Pública (ISP), a través de su Agencia Nacional de Medicamentos (ANAMED), es la entidad técnica encargada del registro sanitario de productos farmacéuticos, control de serie/calidad y del Sistema Nacional de Farmacovigilancia."
+
+            },
+
+            {
+
+                id: 102,
+
+                title: "Situación 2: Compra Agregada e Intermediación de Medicamentos",
+
+                scenario: "Se requiere abastecer de insulina e inhaladores a toda la red pública de hospitales y CESFAM del país, además de intermediar precios más bajos para farmacias privadas adheridas a la Ley N° 21.198.",
+
+                correctEntity: "CENABAST",
+
+                normativeExplanation: "Correcto. La Central de Abastecimiento del Sistema Nacional de Servicios de Salud (CENABAST) gestiona las compras consolidadas e intermediación de medicamentos, dispositivos e insumos para la red pública y farmacias en convenio."
+
+            },
+
+            {
+
+                id: 103,
+
+                title: "Situación 3: Apertura, Turnos y Fiscalización Sanitaria de Farmacias",
+
+                scenario: "Una nueva farmacia comunitaria solicita su autorización sanitaria de instalación y funcionamiento en regiones, y posteriormente recibe una inspección en terreno sobre cadena de frío y libro de psicotrópicos.",
+
+                correctEntity: "SEREMI de Salud",
+
+                normativeExplanation: "Correcto. La Secretaría Regional Ministerial (SEREMI) de Salud ejerce la Autoridad Sanitaria Regional: autoriza la instalación de farmacias, fija los turnos farmacéuticos y fiscaliza el cumplimiento del Código Sanitario y Decreto 466 en terreno."
+
+            },
+
+            {
+
+                id: 104,
+
+                title: "Situación 4: Rectoría Sanitaria, Políticas Públicas y Decretos GES",
+
+                scenario: "Se define la Estrategia Nacional de Salud de la década, el Formulario Nacional de Medicamentos y se dictan las Guías Clínicas oficiales de las 87 patologías GES.",
+
+                correctEntity: "MINSAL",
+
+                normativeExplanation: "Correcto. El Ministerio de Salud (MINSAL), a través de sus Subsecretarías de Salud Pública y de Redes Asistenciales, ejerce el rol rector, normativo y de formulación de políticas públicas de salud en Chile."
+
+            },
+
+            {
+
+                id: 105,
+
+                title: "Situación 5: Seguro Público, Tramos A-D y Copago Cero",
+
+                scenario: "Un trabajador cotiza su 7% legal para salud en el seguro público y desea saber cómo acceder a beneficios en la red pública (MAI) o comprar un bono en la Modalidad Libre Elección (MLE).",
+
+                correctEntity: "FONASA",
+
+                normativeExplanation: "Correcto. El Fondo Nacional de Salud (FONASA) es el organismo público encargado de recaudar, administrar y distribuir los recursos financieros del seguro público de salud bajo un principio de solidaridad."
+
+            },
+
+            {
+
+                id: 106,
+
+                title: "Situación 6: Reclamo por Incumplimiento GES y Fiscalización de ISAPRE/FONASA",
+
+                scenario: "Un paciente denuncia que su aseguradora no respetó el plazo legal de la garantía de oportunidad GES para la entrega de su tratamiento y que en una clínica vulneraron la Ley N° 20.584 de Derechos y Deberes.",
+
+                correctEntity: "Superintendencia de Salud",
+
+                normativeExplanation: "Correcto. La Superintendencia de Salud (a través de sus Intendencias de Fondos y Seguros Previsionales y de Prestadores) fiscaliza a ISAPRE y FONASA, resuelve reclamos por garantías GES y vela por la Ley de Derechos y Deberes de los Pacientes."
+
+            }
+
+        ];
+
+
+
+        const INSTITUTIONS_LIST = [
+
+            "ISP",
+
+            "CENABAST",
+
+            "SEREMI de Salud",
+
+            "MINSAL",
+
+            "FONASA",
+
+            "Superintendencia de Salud"
+
+        ];
+
+
+
+        // Estado Global de la Sesión del Estudiante
+
+        let currentCaseIndex = 0;
+
+        let caseProgress = {}; // { caseId: { solved: true, score: 85, step1, step2, step3, step4Text, feedbackText, metacognitive } }
+
+        let labProgress = {};  // { situationId: { selectedEntity, isCorrect } }
+
+        let verificationCode = "CENCO-FAR-" + Math.floor(100000 + Math.random() * 900000);
+
+
+
+        // ==========================================
+
+        // INICIALIZACIÓN AL CARGAR LA PÁGINA
+
+        // ==========================================
+
+        window.addEventListener("DOMContentLoaded", () => {
+
+            populateStepSelects();
+
+            renderCaseSelector();
+
+            loadCase(0);
+
+            renderInstitutionalLab();
+
+            initReportMetadata();
+
+            updateReportPreview();
+
+        });
+
+
+
+        // Inicializa opciones de los selectores de Pasos 1, 2 y 3
+
+        function populateStepSelects() {
+
+            const s1 = document.getElementById("step1-select");
+
+            const s2 = document.getElementById("step2-select");
+
+            const s3 = document.getElementById("step3-select");
+
+
+
+            s1.innerHTML = STEP1_OPTIONS.map(o => `<option value="${o.value}">${o.label}</option>`).join("");
+
+            s2.innerHTML = STEP2_OPTIONS.map(o => `<option value="${o.value}">${o.label}</option>`).join("");
+
+            s3.innerHTML = STEP3_OPTIONS.map(o => `<option value="${o.value}">${o.label}</option>`).join("");
+
+        }
+
+
+
+        // ==========================================
+
+        // NAVEGACIÓN ENTRE LAS 3 PESTAÑAS
+
+        // ==========================================
+
+        function switchTab(tabId) {
+
+            const tabs = ["tab-casos", "tab-institucionalidad", "tab-reporte"];
+
+            tabs.forEach(t => {
+
+                const section = document.getElementById(t);
+
+                const btn = document.getElementById("btn-" + t);
+
+                if (t === tabId) {
+
+                    section.classList.remove("hidden");
+
+                    btn.classList.add("tab-active");
+
+                    btn.classList.remove("text-slate-600");
+
+                } else {
+
+                    section.classList.add("hidden");
+
+                    btn.classList.remove("tab-active");
+
+                    btn.classList.add("text-slate-600");
+
+                }
+
+            });
+
+
+
+            if (tabId === "tab-reporte") {
+
+                updateReportPreview();
+
+            }
+
+        }
+
+
+
+        // ==========================================
+
+        // MODAL PROTOCOLO ÉTICO E IA RESPONSABLE
+
+        // ==========================================
+
+        function openEthicalModal() {
+
+            document.getElementById("ethical-modal").classList.remove("hidden");
+
+        }
+
+
+
+        function closeEthicalModal() {
+
+            document.getElementById("ethical-modal").classList.add("hidden");
+
+        }
+
+
+
+        // Notificación Toast amigable (reemplaza cualquier uso de alert)
+
+        function showToast(message, iconClass = "fa-circle-check text-cenco-orange") {
+
+            const toast = document.getElementById("toast-notification");
+
+            const icon = document.getElementById("toast-icon");
+
+            const msg = document.getElementById("toast-message");
+
+
+
+            icon.className = `fa-solid ${iconClass} text-lg`;
+
+            msg.textContent = message;
+
+            toast.classList.remove("hidden");
+
+
+
+            setTimeout(() => {
+
+                toast.classList.add("hidden");
+
+            }, 4000);
+
+        }
+
+
+
+        // ==========================================
+
+        // GESTIÓN DE CASOS EN PESTAÑA 1
+
+        // ==========================================
+
+        function renderCaseSelector() {
+
+            const container = document.getElementById("case-selector-container");
+
+            container.innerHTML = CASES_DATA.map((c, idx) => {
+
+                const isCurrent = idx === currentCaseIndex;
+
+                const progress = caseProgress[c.id];
+
+                const isSolved = progress && progress.solved;
+
+
+
+                return `
+
+                    <button onclick="loadCase(${idx})" class="${isCurrent ? 'case-btn-active' : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200'} border rounded-xl p-3 text-left transition flex flex-col justify-between cursor-pointer">
+
+                        <div class="flex items-center justify-between w-full mb-1">
+
+                            <span class="text-[11px] font-extrabold uppercase tracking-wider ${isCurrent ? 'text-cenco-orange' : 'text-cenco-corp'}">
+
+                                Caso ${idx + 1} ${c.isAI ? '• IA' : ''}
+
+                            </span>
+
+                            ${isSolved 
+
+                                ? `<span class="bg-emerald-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full"><i class="fa-solid fa-check mr-0.5"></i> ${progress.score} pts</span>` 
+
+                                : `<span class="text-[10px] ${isCurrent ? 'text-slate-300' : 'text-slate-400'}">Pendiente</span>`
+
+                            }
+
+                        </div>
+
+                        <div class="text-xs font-bold leading-snug line-clamp-2">${c.shortTitle}</div>
+
+                    </button>
+
+                `;
+
+            }).join("");
+
+
+
+            // Actualizar contador de la pestaña 1
+
+            const solvedCount = Object.values(caseProgress).filter(p => p.solved).length;
+
+            document.getElementById("badge-casos-count").textContent = `${solvedCount}/${CASES_DATA.length}`;
+
+        }
+
+
+
+        function loadCase(index) {
+
+            currentCaseIndex = index;
+
+            const c = CASES_DATA[index];
+
+            const saved = caseProgress[c.id];
+
+
+
+            renderCaseSelector();
+
+
+
+            // Poblar Ficha Izquierda
+
+            document.getElementById("case-tag").textContent = c.tag;
+
+            document.getElementById("case-title").textContent = c.title;
+
+            document.getElementById("case-context").textContent = c.context;
+
+            document.getElementById("case-profile").textContent = c.profile;
+
+            document.getElementById("case-query").textContent = c.query;
+
+            document.getElementById("case-dilemma").textContent = c.dilemma;
+
+            document.getElementById("case-hint-text").textContent = c.hint;
+
+
+
+            // Ocultar pista por defecto al cambiar de caso
+
+            document.getElementById("case-hint-box").classList.add("hidden");
+
+            document.getElementById("hint-chevron").classList.remove("rotate-180");
+
+
+
+            // Estado en píldora superior
+
+            const statusPill = document.getElementById("case-status-pill");
+
+            if (saved && saved.solved) {
+
+                statusPill.textContent = `Resuelto (${saved.score}/100 pts)`;
+
+                statusPill.className = "bg-emerald-500 text-white text-xs px-2.5 py-0.5 rounded-full font-bold";
+
+            } else {
+
+                statusPill.textContent = "Pendiente de resolver";
+
+                statusPill.className = "bg-white/15 text-white text-xs px-2.5 py-0.5 rounded-full font-medium";
+
+            }
+
+
+
+            // Poblar chips de términos sugeridos
+
+            const termsContainer = document.getElementById("suggested-terms-container");
+
+            termsContainer.innerHTML = (c.suggestedTerms || []).map(term => `
+
+                <button type="button" onclick="insertSuggestedTerm('${term.replace(/'/g, "\\'")}')" class="bg-cenco-light hover:bg-cenco-cyan/20 text-cenco-navy text-[11px] font-semibold px-2 py-0.5 rounded-md border border-cenco-cyan/30 transition cursor-pointer" title="Haz clic para insertar este concepto en tu respuesta">
+
+                    + ${term}
+
+                </button>
+
+            `).join("");
+
+
+
+            // Restaurar respuestas si ya fue resuelto, o limpiar
+
+            if (saved) {
+
+                document.getElementById("step1-select").value = saved.step1 || "";
+
+                document.getElementById("step2-select").value = saved.step2 || "";
+
+                document.getElementById("step3-select").value = saved.step3 || "";
+
+                document.getElementById("step4-textarea").value = saved.step4Text || "";
+
+                updateCharCounter();
+
+                if (saved.solved) {
+
+                    renderFeedbackPanel(saved);
+
+                } else {
+
+                    document.getElementById("feedback-container").classList.add("hidden");
+
+                }
+
+            } else {
+
+                document.getElementById("step1-select").value = "";
+
+                document.getElementById("step2-select").value = "";
+
+                document.getElementById("step3-select").value = "";
+
+                document.getElementById("step4-textarea").value = "";
+
+                updateCharCounter();
+
+                document.getElementById("feedback-container").classList.add("hidden");
+
+            }
+
+        }
+
+
+
+        function toggleCaseHint() {
+
+            const box = document.getElementById("case-hint-box");
+
+            const chev = document.getElementById("hint-chevron");
+
+            box.classList.toggle("hidden");
+
+            chev.classList.toggle("rotate-180");
+
+        }
+
+
+
+        function insertSuggestedTerm(term) {
+
+            const textarea = document.getElementById("step4-textarea");
+
+            const current = textarea.value;
+
+            const separator = current.length > 0 && !current.endsWith(" ") ? " " : "";
+
+            textarea.value = current + separator + term;
+
+            textarea.focus();
+
+            updateCharCounter();
+
+        }
+
+
+
+        function updateCharCounter() {
+
+            const text = document.getElementById("step4-textarea").value.trim();
+
+            const counter = document.getElementById("char-counter");
+
+            counter.textContent = `${text.length} caracteres (Mín. sugerido: 80)`;
+
+            if (text.length >= 80) {
+
+                counter.className = "text-[11px] font-bold text-emerald-600";
+
+            } else {
+
+                counter.className = "text-[11px] font-medium text-slate-400";
+
+            }
+
+        }
+
+
+
+        function resetCurrentCaseForm() {
+
+            document.getElementById("step1-select").value = "";
+
+            document.getElementById("step2-select").value = "";
+
+            document.getElementById("step3-select").value = "";
+
+            document.getElementById("step4-textarea").value = "";
+
+            updateCharCounter();
+
+            document.getElementById("feedback-container").classList.add("hidden");
+
+            showToast("Formulario del caso reiniciado.", "fa-rotate-left text-cenco-cyan");
+
+        }
+
+
+
+        function nextCase() {
+
+            const nextIdx = (currentCaseIndex + 1) % CASES_DATA.length;
+
+            loadCase(nextIdx);
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        }
+
+
+
+        // ==========================================
+
+        // HELPER GEMINI API CON EXPONENTIAL BACKOFF
+
+        // ==========================================
+
+        async function callGeminiAPI(systemPrompt, userPrompt, responseSchema = null) {
+
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`;
+
+            const payload = {
+
+                contents: [{ parts: [{ text: userPrompt }] }],
+
+                systemInstruction: { parts: [{ text: systemPrompt }] }
+
+            };
+
+
+
+            if (responseSchema) {
+
+                payload.generationConfig = {
+
+                    responseMimeType: "application/json",
+
+                    responseSchema: responseSchema
+
+                };
+
+            }
+
+
+
+            const delays = [1000, 2000, 4000];
+
+            for (let attempt = 0; attempt <= delays.length; attempt++) {
+
+                try {
+
+                    const response = await fetch(apiUrl, {
+
+                        method: "POST",
+
+                        headers: { "Content-Type": "application/json" },
+
+                        body: JSON.stringify(payload)
+
+                    });
+
+                    if (!response.ok) {
+
+                        throw new Error(`HTTP status ${response.status}`);
+
+                    }
+
+                    const result = await response.json();
+
+                    const text = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+                    if (!text) throw new Error("Empty response from Gemini");
+
+                    return responseSchema ? JSON.parse(text) : text;
+
+                } catch (err) {
+
+                    if (attempt === delays.length) {
+
+                        throw err;
+
+                    }
+
+                    await new Promise(r => setTimeout(r, delays[attempt]));
+
+                }
+
+            }
+
+        }
+
+
+
+        // ==========================================
+
+        // EVALUACIÓN DEL CASO (LOCAL + GEMINI IA)
+
+        // ==========================================
+
+        async function evaluateCurrentCase() {
+
+            const c = CASES_DATA[currentCaseIndex];
+
+            const s1 = document.getElementById("step1-select").value;
+
+            const s2 = document.getElementById("step2-select").value;
+
+            const s3 = document.getElementById("step3-select").value;
+
+            const s4 = document.getElementById("step4-textarea").value.trim();
+
+
+
+            if (!s1 || !s2 || !s3) {
+
+                showToast("Por favor selecciona una opción en los Pasos 1, 2 y 3 antes de evaluar.", "fa-triangle-exclamation text-amber-400");
+
+                return;
+
+            }
+
+            if (s4.length < 20) {
+
+                showToast("Por favor redacta tu orientación técnica como TNS en Farmacia en el Paso 4 (mínimo 20 caracteres).", "fa-pen-to-square text-amber-400");
+
+                return;
+
+            }
+
+
+
+            // Botón en estado de carga
+
+            const btn = document.getElementById("btn-evaluate-case");
+
+            const originalBtnHTML = btn.innerHTML;
+
+            btn.disabled = true;
+
+            btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin mr-2"></i><span>Analizando caso con IA Docente...</span>`;
+
+
+
+            // 1. Evaluación inmediata de los Pasos 1, 2 y 3 (20 puntos cada uno = 60 puntos máx.)
+
+            const isStep1Ok = s1 === c.correctStep1;
+
+            const isStep2Ok = s2 === c.correctStep2;
+
+            const isStep3Ok = s3 === c.correctStep3;
+
+
+
+            const step1Pts = isStep1Ok ? 20 : 0;
+
+            const step2Pts = isStep2Ok ? 20 : 0;
+
+            const step3Pts = isStep3Ok ? 20 : 0;
+
+            const mcTotalPts = step1Pts + step2Pts + step3Pts;
+
+
+
+            // 2. Evaluación del Paso 4 con Gemini API (con fallback local estructurado)
+
+            let step4Pts = 0;
+
+            let aiFeedbackHTML = "";
+
+            let metacognitiveText = c.metacognitiveQuestion;
+
+
+
+            try {
+
+                const systemPrompt = `Eres un docente experto de la carrera Técnico de Nivel Superior (TNS) en Farmacia del CFT CENCO en Chile, a cargo de la asignatura "Sistema de Salud en Chile" (Unidad 1: Organización, Estructura y Previsión del Sistema de Salud).
+
+Evalúa la respuesta escrita del estudiante en el Paso 4 del simulador con tono formativo, riguroso y alentador.`;
+
+
+
+                const userPrompt = `Caso Clínico: ${c.title}
+
+Contexto: ${c.context}
+
+Consulta del paciente en farmacia: ${c.query}
+
+Dilema clave: ${c.dilemma}
+
+Conceptos normativos esperados: ${c.hint}
+
+
+
+Respuesta redactada por el estudiante de TNS en Farmacia (Paso 4):
+
+"${s4}"
+
+
+
+Evalúa esta respuesta considerando:
+
+1. Precisión normativa sobre el Sistema de Salud chileno (FONASA, ISAPRE, GES/AUGE, Ley 16.744, Ley Ricarte Soto, Niveles de Atención o rol de ISP/CENABAST/SEREMI/MINSAL según el caso).
+
+2. Claridad y empatía en la orientación en el mesón de farmacia.
+
+Asigna un puntaje entre 5 y 40 puntos para el Paso 4.`;
+
+
+
+                const schema = {
+
+                    type: "OBJECT",
+
+                    properties: {
+
+                        step4Score: { type: "INTEGER", description: "Puntaje entre 5 y 40 puntos para la respuesta escrita." },
+
+                        strengths: { type: "STRING", description: "Aciertos técnicos y éticos de la respuesta del estudiante." },
+
+                        improvements: { type: "STRING", description: "Omisiones o precisiones conceptuales que debe reforzar según la Unidad 1." },
+
+                        metacognitivePrompt: { type: "STRING", description: "Pregunta breve de verificación: ¿Qué elemento específico de esta respuesta debe contrastar el estudiante con su Cuaderno 1?" }
+
+                    },
+
+                    required: ["step4Score", "strengths", "improvements", "metacognitivePrompt"]
+
+                };
+
+
+
+                const aiResult = await callGeminiAPI(systemPrompt, userPrompt, schema);
+
+                step4Pts = Math.min(40, Math.max(5, Number(aiResult.step4Score) || 28));
+
+                aiFeedbackHTML = `
+
+                    <p><strong><i class="fa-solid fa-thumbs-up text-emerald-600 mr-1"></i> Aciertos identificados:</strong> ${aiResult.strengths}</p>
+
+                    <p><strong><i class="fa-solid fa-wrench text-cenco-corp mr-1"></i> Aspectos por reforzar (Unidad 1):</strong> ${aiResult.improvements}</p>
+
+                `;
+
+                if (aiResult.metacognitivePrompt) {
+
+                    metacognitiveText = aiResult.metacognitivePrompt;
+
+                }
+
+            } catch (error) {
+
+                // Evaluación local estructurada de respaldo (Fallback seguro si no hay conexión)
+
+                const localEval = evaluateStep4Locally(c, s4);
+
+                step4Pts = localEval.score;
+
+                aiFeedbackHTML = localEval.html;
+
+                metacognitiveText = c.metacognitiveQuestion;
+
+            }
+
+
+
+            const totalScore = mcTotalPts + step4Pts;
+
+
+
+            // Guardar en el estado del estudiante
+
+            const evaluationData = {
+
+                caseId: c.id,
+
+                solved: true,
+
+                score: totalScore,
+
+                step1: s1,
+
+                step2: s2,
+
+                step3: s3,
+
+                isStep1Ok,
+
+                isStep2Ok,
+
+                isStep3Ok,
+
+                step4Pts,
+
+                step4Text: s4,
+
+                aiFeedbackHTML,
+
+                metacognitiveText
+
+            };
+
+
+
+            caseProgress[c.id] = evaluationData;
+
+
+
+            // Restaurar botón y mostrar panel
+
+            btn.disabled = false;
+
+            btn.innerHTML = originalBtnHTML;
+
+
+
+            renderCaseSelector();
+
+            loadCase(currentCaseIndex);
+
+            renderFeedbackPanel(evaluationData);
+
+            updateReportPreview();
+
+
+
+            // Scroll suave hacia la retroalimentación
+
+            document.getElementById("feedback-container").scrollIntoView({ behavior: "smooth", block: "nearest" });
+
+            showToast(`Caso evaluado: ${totalScore}/100 puntos obtenidos.`);
+
+        }
+
+
+
+        // Evaluador local de respaldo para el Paso 4 basado en rúbrica de palabras clave y extensión
+
+        function evaluateStep4Locally(caseObj, studentText) {
+
+            const lower = studentText.toLowerCase();
+
+            const matchedKeywords = (caseObj.keywords || []).filter(k => lower.includes(k.toLowerCase()));
+
+
+
+            let score = 15; // Base por redactar orientación
+
+            score += Math.min(15, matchedKeywords.length * 4);
+
+            if (studentText.length >= 90) score += 6;
+
+            if (studentText.length >= 160) score += 4;
+
+            score = Math.min(40, score);
+
+
+
+            const strengths = matchedKeywords.length >= 2
+
+                ? `Integraste correctamente conceptos clave del caso en tu orientación al paciente (${matchedKeywords.slice(0, 5).join(", ")}), demostrando comprensión del rol orientador del TNS en Farmacia.`
+
+                : `Presentaste una orientación inicial empática para atender la consulta del usuario en el mesón de farmacia.`;
+
+
+
+            const improvements = `Para alcanzar la excelencia técnica, asegúrate de explicitar todos los fundamentos normativos de la Unidad 1: ${caseObj.hint}`;
+
+
+
+            return {
+
+                score,
+
+                html: `
+
+                    <p><strong><i class="fa-solid fa-thumbs-up text-emerald-600 mr-1"></i> Aciertos identificados:</strong> ${strengths}</p>
+
+                    <p><strong><i class="fa-solid fa-book-medical text-cenco-corp mr-1"></i> Contraste Normativo Unidad 1:</strong> ${improvements}</p>
+
+                `
+
+            };
+
+        }
+
+
+
+        function getOptionLabel(optionsArray, val) {
+
+            const found = optionsArray.find(o => o.value === val);
+
+            return found ? found.label : val;
+
+        }
+
+
+
+        function renderFeedbackPanel(evalData) {
+
+            const c = CASES_DATA[currentCaseIndex];
+
+            const container = document.getElementById("feedback-container");
+
+            container.classList.remove("hidden");
+
+
+
+            document.getElementById("feedback-score").textContent = `${evalData.score} / 100`;
+
+            document.getElementById("feedback-step4-pts").textContent = `${evalData.step4Pts} / 40 pts`;
+
+
+
+            const stepsList = document.getElementById("feedback-steps-list");
+
+            const stepsConfig = [
+
+                {
+
+                    num: 1,
+
+                    title: "Subsistema Previsional y Cobertura",
+
+                    ok: evalData.isStep1Ok,
+
+                    userVal: getOptionLabel(STEP1_OPTIONS, evalData.step1),
+
+                    correctVal: getOptionLabel(STEP1_OPTIONS, c.correctStep1)
+
+                },
+
+                {
+
+                    num: 2,
+
+                    title: "Nivel de Atención y Prevención",
+
+                    ok: evalData.isStep2Ok,
+
+                    userVal: getOptionLabel(STEP2_OPTIONS, evalData.step2),
+
+                    correctVal: getOptionLabel(STEP2_OPTIONS, c.correctStep2)
+
+                },
+
+                {
+
+                    num: 3,
+
+                    title: "Institución Pública / Reguladora",
+
+                    ok: evalData.isStep3Ok,
+
+                    userVal: getOptionLabel(STEP3_OPTIONS, evalData.step3),
+
+                    correctVal: getOptionLabel(STEP3_OPTIONS, c.correctStep3)
+
+                }
+
+            ];
+
+
+
+            stepsList.innerHTML = stepsConfig.map(st => `
+
+                <div class="p-3 rounded-xl border ${st.ok ? 'bg-emerald-50/70 border-emerald-200' : 'bg-rose-50/70 border-rose-200'}">
+
+                    <div class="flex items-center justify-between">
+
+                        <span class="font-bold ${st.ok ? 'text-emerald-900' : 'text-rose-900'}">
+
+                            <i class="fa-solid ${st.ok ? 'fa-circle-check text-emerald-600' : 'fa-circle-xmark text-rose-600'} mr-1.5"></i>
+
+                            Paso ${st.num}: ${st.title}
+
+                        </span>
+
+                        <span class="text-xs font-bold ${st.ok ? 'text-emerald-700' : 'text-rose-700'}">
+
+                            ${st.ok ? '+20 pts' : '0 pts'}
+
+                        </span>
+
+                    </div>
+
+                    <div class="text-xs mt-1 text-slate-700">
+
+                        <strong>Tu selección:</strong> ${st.userVal}
+
+                    </div>
+
+                    ${!st.ok ? `<div class="text-xs mt-1 text-emerald-800 font-semibold"><strong>Respuesta normativa correcta:</strong> ${st.correctVal}</div>` : ''}
+
+                </div>
+
+            `).join("");
+
+
+
+            document.getElementById("feedback-ai-text").innerHTML = evalData.aiFeedbackHTML;
+
+            document.getElementById("feedback-metacognitive").textContent = evalData.metacognitiveText;
+
+        }
+
+
+
+        // ==========================================
+
+        // GENERAR CASO NUEVO CON IA (CON FALLBACK SEGURO)
+
+        // ==========================================
+
+        async function generateAICase() {
+
+            const btn = document.getElementById("btn-generate-ai-case");
+
+            const originalHTML = btn.innerHTML;
+
+            btn.disabled = true;
+
+            btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin mr-2"></i><span>Generando Caso con IA...</span>`;
+
+
+
+            let newCaseObj = null;
+
+
+
+            try {
+
+                const systemPrompt = `Eres docente de la asignatura "Sistema de Salud en Chile" para la carrera Técnico de Nivel Superior en Farmacia del CFT CENCO.
+
+Crea un caso clínico-previsional inédito y realista en el mesón de farmacia que evalúe contenidos de la Unidad 1 (FONASA, ISAPRE, GES/AUGE, Ley 16.744, Ley Ricarte Soto, Niveles de Atención o Rol de ISP/CENABAST/SEREMI).
+
+Debes elegir exactamente una clave válida para correctStep1, correctStep2 y correctStep3 entre las opciones permitidas.`;
+
+
+
+                const userPrompt = `Genera un nuevo caso práctico de farmacia en Chile para estudiantes de TNS en Farmacia.
+
+Valores válidos para correctStep1: "FONASA_MAI_GES_COPAGO_CERO", "LEY_16744_MUTUAL_ISL", "REGULACION_SANITaria_FARMACOVIGILANCIA", "ISAPRE_LEY_RICARTE_SOTO", "FONASA_APS_PROGRAMA_NACIONAL".
+
+Valores válidos para correctStep2: "PRIMARIO_APS_SECUNDARIA", "URGENCIA_MUTUAL_SECUNDARIA_TERCIARIA", "TRANSVERSAL_FARMACIA_PRIMARIA", "TERCIARIO_HOSPITAL_TERCIARIA", "PRIMARIO_POSTA_SECUNDARIO_CDT".
+
+Valores válidos para correctStep3: "FONASA_SUPERINTENDENCIA", "MUTUALIDADES_ISL_SUSESO", "ISP_CENABAST_SEREMI", "MINSAL_FONASA_RICARTE_SOTO", "MINSAL_SERVICIO_SALUD_APS".`;
+
+
+
+                const schema = {
+
+                    type: "OBJECT",
+
+                    properties: {
+
+                        shortTitle: { type: "STRING" },
+
+                        title: { type: "STRING" },
+
+                        context: { type: "STRING" },
+
+                        profile: { type: "STRING" },
+
+                        query: { type: "STRING" },
+
+                        dilemma: { type: "STRING" },
+
+                        hint: { type: "STRING" },
+
+                        correctStep1: { type: "STRING" },
+
+                        correctStep2: { type: "STRING" },
+
+                        correctStep3: { type: "STRING" },
+
+                        suggestedTerms: { type: "ARRAY", items: { type: "STRING" } },
+
+                        metacognitiveQuestion: { type: "STRING" }
+
+                    },
+
+                    required: ["shortTitle", "title", "context", "profile", "query", "dilemma", "hint", "correctStep1", "correctStep2", "correctStep3", "suggestedTerms", "metacognitiveQuestion"]
+
+                };
+
+
+
+                const generated = await callGeminiAPI(systemPrompt, userPrompt, schema);
+
+                const newId = CASES_DATA.length + 1;
+
+                newCaseObj = {
+
+                    id: newId,
+
+                    isAI: true,
+
+                    tag: `Caso ${newId} • Generado con IA`,
+
+                    shortTitle: generated.shortTitle,
+
+                    title: generated.title,
+
+                    context: generated.context,
+
+                    profile: generated.profile,
+
+                    query: `«${generated.query.replace(/^[«"]|[»"]$/g, '')}»`,
+
+                    dilemma: generated.dilemma,
+
+                    hint: generated.hint,
+
+                    correctStep1: STEP1_OPTIONS.some(o => o.value === generated.correctStep1) ? generated.correctStep1 : "FONASA_MAI_GES_COPAGO_CERO",
+
+                    correctStep2: STEP2_OPTIONS.some(o => o.value === generated.correctStep2) ? generated.correctStep2 : "PRIMARIO_APS_SECUNDARIA",
+
+                    correctStep3: STEP3_OPTIONS.some(o => o.value === generated.correctStep3) ? generated.correctStep3 : "FONASA_SUPERINTENDENCIA",
+
+                    suggestedTerms: generated.suggestedTerms?.slice(0, 6) || ["FONASA", "GES/AUGE", "ISP", "CENABAST", "TNS en Farmacia"],
+
+                    keywords: ["fonasa", "ges", "isp", "cenabast", "seremi", "16.744", "ricarte", "primario", "terciario", "cobertura"],
+
+                    metacognitiveQuestion: generated.metacognitiveQuestion
+
+                };
+
+            } catch (err) {
+
+                // Fallback seguro si no hay conexión a internet o límite de cuota
+
+                const newId = CASES_DATA.length + 1;
+
+                newCaseObj = {
+
+                    id: newId,
+
+                    isAI: true,
+
+                    tag: `Caso ${newId} • Caso Clínico Extra IA`,
+
+                    shortTitle: "Enfermedad Profesional en Laboratorio",
+
+                    title: "Técnico presenta dermatitis laboral por manipulación de antisépticos y consulta por cobertura",
+
+                    context: "Farmacia de un Centro de Salud donde una trabajadora de aseo clínico consulta por lesiones cutáneas derivadas de su trabajo diario.",
+
+                    profile: "Marcela (39 años), trabajadora contratada en empresa de servicios hospitalarios, afiliada a FONASA Tramo C.",
+
+                    query: "«Llevo dos meses con una alergia severa en las manos por el desinfectante industrial que usamos en el turno. ¿Debo pedir hora en el CESFAM por FONASA o esto lo cubre el seguro laboral de mi empleador junto con las cremas dermatológicas?»",
+
+                    dilemma: "¿Cómo opera el Seguro de la Ley N° 16.744 ante una sospecha de Enfermedad Profesional y qué organismo califica y entrega los medicamentos gratuitamente?",
+
+                    hint: "Recuerda (Cuaderno 1): La Ley N° 16.744 protege tanto los Accidentes del Trabajo/Trayecto como las Enfermedades Profesionales causadas de manera directa por el ejercicio de la profesión o trabajo. El trabajador debe ser derivado a su Organismo Administrador (Mutualidad o ISL) mediante la Denuncia Individual de Enfermedad Profesional (DIEP), recibiendo medicamentos y tratamiento con cobertura del 100%.",
+
+                    correctStep1: "LEY_16744_MUTUAL_ISL",
+
+                    correctStep2: "URGENCIA_MUTUAL_SECUNDARIA_TERCIARIA",
+
+                    correctStep3: "MUTUALIDADES_ISL_SUSESO",
+
+                    suggestedTerms: ["Enfermedad Profesional", "Ley 16.744", "Formulario DIEP", "Mutualidad o ISL", "Cobertura 100% Gratuita"],
+
+                    keywords: ["enfermedad profesional", "16.744", "16744", "mutual", "isl", "diep", "trabajo", "100%", "medicamentos"],
+
+                    metacognitiveQuestion: "Contrasta con tu Cuaderno 1: ¿Cuál es la diferencia conceptual entre un Accidente del Trabajo y una Enfermedad Profesional según la Ley N° 16.744?"
+
+                };
+
+            }
+
+
+
+            CASES_DATA.push(newCaseObj);
+
+            btn.disabled = false;
+
+            btn.innerHTML = originalHTML;
+
+
+
+            loadCase(CASES_DATA.length - 1);
+
+            showToast(`Nuevo caso clínico (#${newCaseObj.id}) generado y cargado con éxito.`, "fa-wand-magic-sparkles text-cenco-cyan");
+
+        }
+
+
+
+        // ==========================================
+
+        // PESTAÑA 2: LABORATORIO DE INSTITUCIONALIDAD
+
+        // ==========================================
+
+        function renderInstitutionalLab() {
+
+            const grid = document.getElementById("lab-situations-grid");
+
+
+
+            grid.innerHTML = LAB_SITUATIONS.map(sit => {
+
+                const state = labProgress[sit.id];
+
+                const isAnswered = Boolean(state);
+
+                const isCorrect = state?.isCorrect;
+
+
+
+                return `
+
+                    <div class="bg-white rounded-2xl shadow-sm border ${isAnswered ? (isCorrect ? 'border-emerald-300' : 'border-rose-300') : 'border-slate-200'} p-5 flex flex-col justify-between space-y-4">
+
+                        <div class="space-y-2">
+
+                            <div class="flex items-center justify-between">
+
+                                <span class="text-xs font-extrabold uppercase tracking-wider text-cenco-corp">${sit.title}</span>
+
+                                ${isAnswered ? `
+
+                                    <span class="text-xs font-bold px-2.5 py-0.5 rounded-full ${isCorrect ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">
+
+                                        ${isCorrect ? '<i class="fa-solid fa-check mr-1"></i>Correcto' : '<i class="fa-solid fa-xmark mr-1"></i>Incorrecto'}
+
+                                    </span>
+
+                                ` : `<span class="text-xs text-slate-400">Selecciona la entidad</span>`}
+
+                            </div>
+
+                            <p class="text-xs sm:text-sm text-slate-700 leading-relaxed bg-slate-50 p-3.5 rounded-xl border border-slate-200/80">
+
+                                ${sit.scenario}
+
+                            </p>
+
+                        </div>
+
+
+
+                        <!-- Botones de Entidades -->
+
+                        <div class="space-y-3">
+
+                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+
+                                ${INSTITUTIONS_LIST.map(inst => {
+
+                                    const isSelected = state?.selectedEntity === inst;
+
+                                    let btnStyle = "bg-slate-50 hover:bg-cenco-light text-cenco-navy border-slate-200";
+
+                                    if (isAnswered) {
+
+                                        if (inst === sit.correctEntity) {
+
+                                            btnStyle = "bg-emerald-600 text-white border-emerald-600 font-bold";
+
+                                        } else if (isSelected && !isCorrect) {
+
+                                            btnStyle = "bg-rose-600 text-white border-rose-600 font-bold";
+
+                                        } else {
+
+                                            btnStyle = "bg-slate-50 text-slate-400 border-slate-200 opacity-60";
+
+                                        }
+
+                                    }
+
+                                    return `
+
+                                        <button onclick="selectInstitutionForLab(${sit.id}, '${inst}')" class="border rounded-lg py-2 px-2.5 text-xs font-semibold transition text-center cursor-pointer ${btnStyle}">
+
+                                            ${inst}
+
+                                        </button>
+
+                                    `;
+
+                                }).join("")}
+
+                            </div>
+
+
+
+                            ${isAnswered ? `
+
+                                <div class="p-3 rounded-xl text-xs leading-relaxed ${isCorrect ? 'bg-emerald-50 text-emerald-950 border border-emerald-200' : 'bg-amber-50 text-amber-950 border border-amber-200'}">
+
+                                    <strong><i class="fa-solid fa-scale-balanced mr-1"></i> Fundamentación Normativa:</strong> ${sit.normativeExplanation}
+
+                                </div>
+
+                            ` : ''}
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            }).join("");
+
+
+
+            updateLabCounters();
+
+        }
+
+
+
+        function selectInstitutionForLab(situationId, entityName) {
+
+            const sit = LAB_SITUATIONS.find(s => s.id === situationId);
+
+            if (!sit) return;
+
+
+
+            const isCorrect = sit.correctEntity === entityName;
+
+            labProgress[situationId] = {
+
+                selectedEntity: entityName,
+
+                isCorrect
+
+            };
+
+
+
+            renderInstitutionalLab();
+
+            updateReportPreview();
+
+        }
+
+
+
+        function updateLabCounters() {
+
+            const total = LAB_SITUATIONS.length;
+
+            const answered = Object.keys(labProgress).length;
+
+            const correct = Object.values(labProgress).filter(v => v.isCorrect).length;
+
+            const accuracy = answered > 0 ? Math.round((correct / total) * 100) : 0;
+
+
+
+            document.getElementById("lab-progress-text").textContent = `${answered} / ${total}`;
+
+            document.getElementById("lab-accuracy-text").textContent = `${accuracy}%`;
+
+            document.getElementById("badge-lab-count").textContent = `${answered}/${total}`;
+
+        }
+
+
+
+        function resetInstitutionalLab() {
+
+            labProgress = {};
+
+            renderInstitutionalLab();
+
+            updateReportPreview();
+
+            showToast("Laboratorio de Institucionalidad reiniciado.", "fa-rotate text-cenco-cyan");
+
+        }
+
+
+
+        // ==========================================
+
+        // PESTAÑA 3: REPORTE Y DECLARACIÓN ÉTICA
+
+        // ==========================================
+
+        function initReportMetadata() {
+
+            const now = new Date();
+
+            const dateStr = now.toLocaleDateString("es-CL", {
+
+                day: "2-digit",
+
+                month: "2-digit",
+
+                year: "numeric",
+
+                hour: "2-digit",
+
+                minute: "2-digit"
+
+            });
+
+            document.getElementById("report-date").textContent = dateStr;
+
+            document.getElementById("report-code").textContent = verificationCode;
+
+        }
+
+
+
+        function updateReportPreview() {
+
+            const nameInput = document.getElementById("student-name").value.trim();
+
+            const reflectionInput = document.getElementById("student-reflection").value.trim();
+
+            const c1 = document.getElementById("ethic-check-1").checked;
+
+            const c2 = document.getElementById("ethic-check-2").checked;
+
+            const c3 = document.getElementById("ethic-check-3").checked;
+
+
+
+            document.getElementById("preview-student-name").textContent = nameInput || "Estudiante TNS en Farmacia (Sin especificar)";
+
+
+
+            // Resumen de Casos
+
+            const solvedCases = Object.values(caseProgress).filter(p => p.solved);
+
+            const avgScore = solvedCases.length > 0
+
+                ? Math.round(solvedCases.reduce((acc, item) => acc + item.score, 0) / solvedCases.length)
+
+                : 0;
+
+            document.getElementById("preview-cases-summary").textContent = `${solvedCases.length} de ${CASES_DATA.length} (Prom: ${avgScore} pts)`;
+
+
+
+            // Resumen de Laboratorio Institucional
+
+            const labAnswered = Object.keys(labProgress).length;
+
+            const labCorrect = Object.values(labProgress).filter(v => v.isCorrect).length;
+
+            const labPct = Math.round((labCorrect / LAB_SITUATIONS.length) * 100);
+
+            document.getElementById("preview-lab-summary").textContent = `${labAnswered}/${LAB_SITUATIONS.length} (${labPct}% aciertos)`;
+
+
+
+            // Tabla de Casos en el Comprobante
+
+            const tbody = document.getElementById("report-cases-tbody");
+
+            tbody.innerHTML = CASES_DATA.map((c, i) => {
+
+                const prog = caseProgress[c.id];
+
+                if (prog && prog.solved) {
+
+                    const excerpt = prog.step4Text.length > 90 ? prog.step4Text.substring(0, 90) + "..." : prog.step4Text;
+
+                    return `
+
+                        <tr>
+
+                            <td class="py-2 px-3 font-semibold text-cenco-navy">Caso ${i + 1}: ${c.shortTitle}</td>
+
+                            <td class="py-2 px-3"><span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold text-[10px]">Completado</span></td>
+
+                            <td class="py-2 px-3 font-extrabold text-cenco-corp">${prog.score} / 100</td>
+
+                            <td class="py-2 px-3 text-slate-600 italic">"${excerpt}"</td>
+
+                        </tr>
+
+                    `;
+
+                } else {
+
+                    return `
+
+                        <tr class="text-slate-400">
+
+                            <td class="py-2 px-3 font-medium">Caso ${i + 1}: ${c.shortTitle}</td>
+
+                            <td class="py-2 px-3"><span class="bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full text-[10px]">Pendiente</span></td>
+
+                            <td class="py-2 px-3">-</td>
+
+                            <td class="py-2 px-3">Sin respuesta registrada aún</td>
+
+                        </tr>
+
+                    `;
+
+                }
+
+            }).join("");
+
+
+
+            // Reflexión
+
+            const refBox = document.getElementById("preview-reflection-box");
+
+            if (reflectionInput) {
+
+                refBox.textContent = `"${reflectionInput}"`;
+
+                refBox.classList.remove("italic", "text-slate-400");
+
+                refBox.classList.add("text-slate-800", "font-medium");
+
+            } else {
+
+                refBox.textContent = "Pendiente de redactar por el estudiante en el formulario...";
+
+                refBox.classList.add("italic");
+
+            }
+
+
+
+            // Estado de Declaración Ética
+
+            const ethicsBox = document.getElementById("preview-ethics-status");
+
+            ethicsBox.innerHTML = `
+
+                <div class="flex items-center space-x-2">
+
+                    <i class="fa-solid ${c1 ? 'fa-square-check text-emerald-600' : 'fa-square text-slate-400'}"></i>
+
+                    <span>[${c1 ? 'ACEPTADO' : 'PENDIENTE'}] Uso exclusivo para práctica formativa y sin datos sensibles de pacientes reales.</span>
+
+                </div>
+
+                <div class="flex items-center space-x-2">
+
+                    <i class="fa-solid ${c2 ? 'fa-square-check text-emerald-600' : 'fa-square text-slate-400'}"></i>
+
+                    <span>[${c2 ? 'ACEPTADO' : 'PENDIENTE'}] Verificación académica de respuestas IA con el Cuaderno 1 y fuentes oficiales (MINSAL, ISP, CENABAST, Superintendencia).</span>
+
+                </div>
+
+                <div class="flex items-center space-x-2">
+
+                    <i class="fa-solid ${c3 ? 'fa-square-check text-emerald-600' : 'fa-square text-slate-400'}"></i>
+
+                    <span>[${c3 ? 'ACEPTADO' : 'PENDIENTE'}] Autoría propia y ejercicio del criterio técnico como futuro TNS en Farmacia CFT CENCO.</span>
+
+                </div>
+
+            `;
+
+        }
+
+
+
+        function copyReportToClipboard() {
+
+            const nameInput = document.getElementById("student-name").value.trim() || "Estudiante TNS en Farmacia";
+
+            const reflectionInput = document.getElementById("student-reflection").value.trim() || "Sin reflexión registrada.";
+
+            const c1 = document.getElementById("ethic-check-1").checked;
+
+            const c2 = document.getElementById("ethic-check-2").checked;
+
+            const c3 = document.getElementById("ethic-check-3").checked;
+
+
+
+            if (!c1 || !c2 || !c3) {
+
+                showToast("Recuerda marcar las 3 casillas de la Declaración Ética antes de copiar tu reporte oficial.", "fa-shield-exclamation text-amber-400");
+
+                return;
+
+            }
+
+
+
+            const solvedCases = Object.values(caseProgress).filter(p => p.solved);
+
+            const avgScore = solvedCases.length > 0
+
+                ? Math.round(solvedCases.reduce((acc, item) => acc + item.score, 0) / solvedCases.length)
+
+                : 0;
+
+            const labAnswered = Object.keys(labProgress).length;
+
+            const labCorrect = Object.values(labProgress).filter(v => v.isCorrect).length;
+
+            const labPct = Math.round((labCorrect / LAB_SITUATIONS.length) * 100);
+
+
+
+            let casesSummaryLines = CASES_DATA.map((c, idx) => {
+
+                const p = caseProgress[c.id];
+
+                return p && p.solved
+
+                    ? `- Caso ${idx + 1} (${c.shortTitle}): COMPLETADO | Puntaje: ${p.score}/100 pts | Mi orientación TNS: "${p.step4Text}"`
+
+                    : `- Caso ${idx + 1} (${c.shortTitle}): Pendiente`;
+
+            }).join("\n");
+
+
+
+            const plainTextReport = `================================================================
+
+CFT CENCO - CENTRO DE FORMACIÓN TÉCNICA
+
+REPORTE DE SIMULACIÓN FORMATIVA Y DECLARACIÓN ÉTICA IA
+
+Carrera: Técnico de Nivel Superior en Farmacia
+
+Asignatura: Sistema de Salud en Chile — Unidad 1
+
+================================================================
+
+Estudiante: ${nameInput}
+
+Fecha: ${document.getElementById("report-date").textContent}
+
+Código de Verificación: ${verificationCode}
+
+
+
+1. RESUMEN DE AVANCE EN EL SIMULADOR:
+
+- Casos Clínico-Previsionales Resueltos: ${solvedCases.length} de ${CASES_DATA.length} (Promedio: ${avgScore} / 100 pts)
+- Laboratorio de Institucionalidad (ISP, CENABAST, MINSAL, SEREMI, FONASA, Superintendencia): ${labAnswered}/${LAB_SITUATIONS.length} resueltos (${labPct}% efectividad)
+
+
+
+2. DETALLE DE CASOS RESUELTOS:
+
+${casesSummaryLines}
+
+
+
+3. REFLEXIÓN Y CONTRASTE CON CUADERNO 1 DE LA ASIGNATURA:
+
+"${reflectionInput}"
+
+
+
+4. DECLARACIÓN DE USO ÉTICO Y RESPONSABLE DE IA:
+
+[X] Declaro haber utilizado este simulador con fines formativos sin ingresar datos sensibles de pacientes reales.
+
+[X] Declaro haber contrastado la retroalimentación automatizada con el Cuaderno 1 de la asignatura y normativa oficial (MINSAL, ISP, CENABAST, Superintendencia de Salud).
+
+[X] Declaro que las orientaciones y reflexiones registradas corresponden a mi redacción y criterio técnico como estudiante de TNS en Farmacia.
+
+================================================================`;
+
+
+
+            const tempTextarea = document.createElement("textarea");
+
+            tempTextarea.value = plainTextReport;
+
+            document.body.appendChild(tempTextarea);
+
+            tempTextarea.select();
+
+            document.execCommand("copy");
+
+            document.body.removeChild(tempTextarea);
+
+
+
+            showToast("¡Reporte copiado al portapapeles! Ya puedes pegarlo en el foro o buzón de Moodle CFT CENCO.", "fa-clipboard-check text-emerald-400");
+
+        }
+
+    </script>
+
+</body>
+
+</html>
